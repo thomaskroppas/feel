@@ -1,0 +1,1329 @@
+{
+  "version": 1,
+  "grid": {
+    "size": 12,
+    "energy": "1 — очень низкая (низ сетки), 12 — очень высокая (верх)",
+    "pleasantness": "1 — очень неприятно (левый край), 12 — очень приятно (правый край)",
+    "intensity": "1 — у центра сетки, 6 — в углу; задаёт насыщенность цвета"
+  },
+  "quadrants": [
+    {
+      "id": "red",
+      "title": "Высокая энергия · неприятно",
+      "color": "#E5484D"
+    },
+    {
+      "id": "yellow",
+      "title": "Высокая энергия · приятно",
+      "color": "#F5B83D"
+    },
+    {
+      "id": "blue",
+      "title": "Низкая энергия · неприятно",
+      "color": "#3E7BFA"
+    },
+    {
+      "id": "green",
+      "title": "Низкая энергия · приятно",
+      "color": "#30A46C"
+    }
+  ],
+  "emotions": [
+    {
+      "id": "yarost",
+      "name": "Ярость",
+      "quadrant": "red",
+      "energy": 12,
+      "pleasantness": 1,
+      "intensity": 6,
+      "description": "Гнев на пределе, трудно себя контролировать."
+    },
+    {
+      "id": "uzhas",
+      "name": "Ужас",
+      "quadrant": "red",
+      "energy": 12,
+      "pleasantness": 2,
+      "intensity": 6,
+      "description": "Сильнейший страх перед чем-то угрожающим."
+    },
+    {
+      "id": "panika",
+      "name": "Паника",
+      "quadrant": "red",
+      "energy": 12,
+      "pleasantness": 3,
+      "intensity": 6,
+      "description": "Страх захлёстывает и мешает думать."
+    },
+    {
+      "id": "negodovanie",
+      "name": "Негодование",
+      "quadrant": "red",
+      "energy": 12,
+      "pleasantness": 4,
+      "intensity": 6,
+      "description": "Сильный гнев из-за несправедливости."
+    },
+    {
+      "id": "shok",
+      "name": "Шок",
+      "quadrant": "red",
+      "energy": 12,
+      "pleasantness": 5,
+      "intensity": 6,
+      "description": "Резкое потрясение от неожиданного события."
+    },
+    {
+      "id": "oshelomlenie",
+      "name": "Ошеломление",
+      "quadrant": "red",
+      "energy": 12,
+      "pleasantness": 6,
+      "intensity": 6,
+      "description": "Слишком много всего сразу, не успеваешь осмыслить."
+    },
+    {
+      "id": "nenavist",
+      "name": "Ненависть",
+      "quadrant": "red",
+      "energy": 11,
+      "pleasantness": 1,
+      "intensity": 6,
+      "description": "Сильная враждебность к кому-то или чему-то."
+    },
+    {
+      "id": "gnev",
+      "name": "Гнев",
+      "quadrant": "red",
+      "energy": 11,
+      "pleasantness": 2,
+      "intensity": 5,
+      "description": "Сильное раздражение и желание дать отпор."
+    },
+    {
+      "id": "strah",
+      "name": "Страх",
+      "quadrant": "red",
+      "energy": 11,
+      "pleasantness": 3,
+      "intensity": 5,
+      "description": "Ощущение угрозы и желание защититься."
+    },
+    {
+      "id": "vozmuschenie",
+      "name": "Возмущение",
+      "quadrant": "red",
+      "energy": 11,
+      "pleasantness": 4,
+      "intensity": 5,
+      "description": "Протест против того, что кажется неправильным."
+    },
+    {
+      "id": "stress",
+      "name": "Стресс",
+      "quadrant": "red",
+      "energy": 11,
+      "pleasantness": 5,
+      "intensity": 5,
+      "description": "Давление обстоятельств, всё на взводе."
+    },
+    {
+      "id": "vzvinchennost",
+      "name": "Взвинченность",
+      "quadrant": "red",
+      "energy": 11,
+      "pleasantness": 6,
+      "intensity": 5,
+      "description": "Нервное возбуждение, трудно успокоиться."
+    },
+    {
+      "id": "otvraschenie",
+      "name": "Отвращение",
+      "quadrant": "red",
+      "energy": 10,
+      "pleasantness": 1,
+      "intensity": 6,
+      "description": "Сильное неприятие, хочется отстраниться."
+    },
+    {
+      "id": "zlost",
+      "name": "Злость",
+      "quadrant": "red",
+      "energy": 10,
+      "pleasantness": 2,
+      "intensity": 5,
+      "description": "Раздражение, переходящее в агрессию."
+    },
+    {
+      "id": "ispug",
+      "name": "Испуг",
+      "quadrant": "red",
+      "energy": 10,
+      "pleasantness": 3,
+      "intensity": 4,
+      "description": "Внезапный страх от неожиданности."
+    },
+    {
+      "id": "trevoga",
+      "name": "Тревога",
+      "quadrant": "red",
+      "energy": 10,
+      "pleasantness": 4,
+      "intensity": 4,
+      "description": "Ожидание плохого без ясной причины."
+    },
+    {
+      "id": "nervoznost",
+      "name": "Нервозность",
+      "quadrant": "red",
+      "energy": 10,
+      "pleasantness": 5,
+      "intensity": 4,
+      "description": "Беспокойство, которое не даёт усидеть на месте."
+    },
+    {
+      "id": "neterpenie",
+      "name": "Нетерпение",
+      "quadrant": "red",
+      "energy": 10,
+      "pleasantness": 6,
+      "intensity": 4,
+      "description": "Трудно дождаться, хочется ускорить события."
+    },
+    {
+      "id": "prezrenie",
+      "name": "Презрение",
+      "quadrant": "red",
+      "energy": 9,
+      "pleasantness": 1,
+      "intensity": 6,
+      "description": "Ощущение, что кто-то недостоин уважения."
+    },
+    {
+      "id": "zavist",
+      "name": "Зависть",
+      "quadrant": "red",
+      "energy": 9,
+      "pleasantness": 2,
+      "intensity": 5,
+      "description": "Досада, что у другого есть то, чего нет у тебя."
+    },
+    {
+      "id": "revnost",
+      "name": "Ревность",
+      "quadrant": "red",
+      "energy": 9,
+      "pleasantness": 3,
+      "intensity": 4,
+      "description": "Страх потерять внимание или близость человека."
+    },
+    {
+      "id": "bespokoystvo",
+      "name": "Беспокойство",
+      "quadrant": "red",
+      "energy": 9,
+      "pleasantness": 4,
+      "intensity": 3,
+      "description": "Мысли возвращаются к тому, что может пойти не так."
+    },
+    {
+      "id": "napryazhenie",
+      "name": "Напряжение",
+      "quadrant": "red",
+      "energy": 9,
+      "pleasantness": 5,
+      "intensity": 3,
+      "description": "Внутренняя собранность в ожидании трудностей."
+    },
+    {
+      "id": "vzvolnovannost",
+      "name": "Взволнованность",
+      "quadrant": "red",
+      "energy": 9,
+      "pleasantness": 6,
+      "intensity": 3,
+      "description": "Лёгкое возбуждение перед чем-то важным."
+    },
+    {
+      "id": "obida",
+      "name": "Обида",
+      "quadrant": "red",
+      "energy": 8,
+      "pleasantness": 1,
+      "intensity": 6,
+      "description": "Боль от несправедливого или пренебрежительного отношения."
+    },
+    {
+      "id": "razdrazhenie",
+      "name": "Раздражение",
+      "quadrant": "red",
+      "energy": 8,
+      "pleasantness": 2,
+      "intensity": 5,
+      "description": "Мелочи цепляют и выводят из себя."
+    },
+    {
+      "id": "dosada",
+      "name": "Досада",
+      "quadrant": "red",
+      "energy": 8,
+      "pleasantness": 3,
+      "intensity": 4,
+      "description": "Неприятно, что вышло не так, как хотелось."
+    },
+    {
+      "id": "ozabochennost",
+      "name": "Озабоченность",
+      "quadrant": "red",
+      "energy": 8,
+      "pleasantness": 4,
+      "intensity": 3,
+      "description": "Голова занята проблемой, которую надо решить."
+    },
+    {
+      "id": "nelovkost",
+      "name": "Неловкость",
+      "quadrant": "red",
+      "energy": 8,
+      "pleasantness": 5,
+      "intensity": 2,
+      "description": "Не по себе, непонятно, как себя вести."
+    },
+    {
+      "id": "rasteryannost",
+      "name": "Растерянность",
+      "quadrant": "red",
+      "energy": 8,
+      "pleasantness": 6,
+      "intensity": 2,
+      "description": "Непонятно, что происходит и что делать."
+    },
+    {
+      "id": "styd",
+      "name": "Стыд",
+      "quadrant": "red",
+      "energy": 7,
+      "pleasantness": 1,
+      "intensity": 6,
+      "description": "Болезненное ощущение, что с тобой что-то не так в глазах других."
+    },
+    {
+      "id": "uyazvlennost",
+      "name": "Уязвлённость",
+      "quadrant": "red",
+      "energy": 7,
+      "pleasantness": 2,
+      "intensity": 5,
+      "description": "Задели самолюбие или гордость."
+    },
+    {
+      "id": "nedovolstvo",
+      "name": "Недовольство",
+      "quadrant": "red",
+      "energy": 7,
+      "pleasantness": 3,
+      "intensity": 4,
+      "description": "Что-то не устраивает, хочется это изменить."
+    },
+    {
+      "id": "smuschenie",
+      "name": "Смущение",
+      "quadrant": "red",
+      "energy": 7,
+      "pleasantness": 4,
+      "intensity": 3,
+      "description": "Неловкость от внимания к себе."
+    },
+    {
+      "id": "neuverennost",
+      "name": "Неуверенность",
+      "quadrant": "red",
+      "energy": 7,
+      "pleasantness": 5,
+      "intensity": 2,
+      "description": "Сомнения в себе или в своём решении."
+    },
+    {
+      "id": "nastorozhennost",
+      "name": "Настороженность",
+      "quadrant": "red",
+      "energy": 7,
+      "pleasantness": 6,
+      "intensity": 1,
+      "description": "Внимание обострено, ждёшь подвоха."
+    },
+    {
+      "id": "udivlenie",
+      "name": "Удивление",
+      "quadrant": "yellow",
+      "energy": 12,
+      "pleasantness": 7,
+      "intensity": 6,
+      "description": "Неожиданность, которая встряхивает."
+    },
+    {
+      "id": "azart",
+      "name": "Азарт",
+      "quadrant": "yellow",
+      "energy": 12,
+      "pleasantness": 8,
+      "intensity": 6,
+      "description": "Захватывающий интерес к игре или вызову."
+    },
+    {
+      "id": "entuziazm",
+      "name": "Энтузиазм",
+      "quadrant": "yellow",
+      "energy": 12,
+      "pleasantness": 9,
+      "intensity": 6,
+      "description": "Горишь идеей и хочешь действовать."
+    },
+    {
+      "id": "likovanie",
+      "name": "Ликование",
+      "quadrant": "yellow",
+      "energy": 12,
+      "pleasantness": 10,
+      "intensity": 6,
+      "description": "Бурная радость, хочется праздновать."
+    },
+    {
+      "id": "eyforiya",
+      "name": "Эйфория",
+      "quadrant": "yellow",
+      "energy": 12,
+      "pleasantness": 11,
+      "intensity": 6,
+      "description": "Радость на пределе, всё кажется возможным."
+    },
+    {
+      "id": "ekstaz",
+      "name": "Экстаз",
+      "quadrant": "yellow",
+      "energy": 12,
+      "pleasantness": 12,
+      "intensity": 6,
+      "description": "Высшая точка восторга."
+    },
+    {
+      "id": "ozhivlenie",
+      "name": "Оживление",
+      "quadrant": "yellow",
+      "energy": 11,
+      "pleasantness": 7,
+      "intensity": 5,
+      "description": "Прилив сил и интереса."
+    },
+    {
+      "id": "motivatsiya",
+      "name": "Мотивация",
+      "quadrant": "yellow",
+      "energy": 11,
+      "pleasantness": 8,
+      "intensity": 5,
+      "description": "Есть цель и желание к ней двигаться."
+    },
+    {
+      "id": "voodushevlenie",
+      "name": "Воодушевление",
+      "quadrant": "yellow",
+      "energy": 11,
+      "pleasantness": 9,
+      "intensity": 5,
+      "description": "Подъём и вера в успех."
+    },
+    {
+      "id": "strast",
+      "name": "Страсть",
+      "quadrant": "yellow",
+      "energy": 11,
+      "pleasantness": 10,
+      "intensity": 5,
+      "description": "Сильное влечение к человеку или делу."
+    },
+    {
+      "id": "vostorg",
+      "name": "Восторг",
+      "quadrant": "yellow",
+      "energy": 11,
+      "pleasantness": 11,
+      "intensity": 5,
+      "description": "Яркая радость от чего-то прекрасного."
+    },
+    {
+      "id": "triumf",
+      "name": "Триумф",
+      "quadrant": "yellow",
+      "energy": 11,
+      "pleasantness": 12,
+      "intensity": 6,
+      "description": "Радость победы и достигнутой цели."
+    },
+    {
+      "id": "bodrost",
+      "name": "Бодрость",
+      "quadrant": "yellow",
+      "energy": 10,
+      "pleasantness": 7,
+      "intensity": 4,
+      "description": "Много энергии и готовности действовать."
+    },
+    {
+      "id": "reshimost",
+      "name": "Решимость",
+      "quadrant": "yellow",
+      "energy": 10,
+      "pleasantness": 8,
+      "intensity": 4,
+      "description": "Твёрдое намерение довести дело до конца."
+    },
+    {
+      "id": "vdohnovenie",
+      "name": "Вдохновение",
+      "quadrant": "yellow",
+      "energy": 10,
+      "pleasantness": 9,
+      "intensity": 4,
+      "description": "Приходят идеи, хочется творить."
+    },
+    {
+      "id": "uvlechennost",
+      "name": "Увлечённость",
+      "quadrant": "yellow",
+      "energy": 10,
+      "pleasantness": 10,
+      "intensity": 4,
+      "description": "Дело захватило, время летит незаметно."
+    },
+    {
+      "id": "voshischenie",
+      "name": "Восхищение",
+      "quadrant": "yellow",
+      "energy": 10,
+      "pleasantness": 11,
+      "intensity": 5,
+      "description": "Радость от чьего-то таланта или красоты."
+    },
+    {
+      "id": "upoenie",
+      "name": "Упоение",
+      "quadrant": "yellow",
+      "energy": 10,
+      "pleasantness": 12,
+      "intensity": 6,
+      "description": "Полное погружение в наслаждение моментом."
+    },
+    {
+      "id": "energichnost",
+      "name": "Энергичность",
+      "quadrant": "yellow",
+      "energy": 9,
+      "pleasantness": 7,
+      "intensity": 3,
+      "description": "Тело и голова работают на полную."
+    },
+    {
+      "id": "sosredotochennost",
+      "name": "Сосредоточенность",
+      "quadrant": "yellow",
+      "energy": 9,
+      "pleasantness": 8,
+      "intensity": 3,
+      "description": "Внимание собрано на задаче, ничто не отвлекает."
+    },
+    {
+      "id": "predvkushenie",
+      "name": "Предвкушение",
+      "quadrant": "yellow",
+      "energy": 9,
+      "pleasantness": 9,
+      "intensity": 3,
+      "description": "Радостное ожидание чего-то хорошего."
+    },
+    {
+      "id": "vesele",
+      "name": "Веселье",
+      "quadrant": "yellow",
+      "energy": 9,
+      "pleasantness": 10,
+      "intensity": 4,
+      "description": "Легко, смешно, хочется шутить."
+    },
+    {
+      "id": "radost",
+      "name": "Радость",
+      "quadrant": "yellow",
+      "energy": 9,
+      "pleasantness": 11,
+      "intensity": 5,
+      "description": "Хорошо, и хочется этим делиться."
+    },
+    {
+      "id": "schaste",
+      "name": "Счастье",
+      "quadrant": "yellow",
+      "energy": 9,
+      "pleasantness": 12,
+      "intensity": 6,
+      "description": "Глубокое ощущение, что жизнь хороша."
+    },
+    {
+      "id": "interes",
+      "name": "Интерес",
+      "quadrant": "yellow",
+      "energy": 8,
+      "pleasantness": 7,
+      "intensity": 2,
+      "description": "Хочется разобраться и узнать больше."
+    },
+    {
+      "id": "uverennost",
+      "name": "Уверенность",
+      "quadrant": "yellow",
+      "energy": 8,
+      "pleasantness": 8,
+      "intensity": 2,
+      "description": "Знаешь, что справишься."
+    },
+    {
+      "id": "nadezhda",
+      "name": "Надежда",
+      "quadrant": "yellow",
+      "energy": 8,
+      "pleasantness": 9,
+      "intensity": 3,
+      "description": "Веришь, что всё сложится хорошо."
+    },
+    {
+      "id": "igrivost",
+      "name": "Игривость",
+      "quadrant": "yellow",
+      "energy": 8,
+      "pleasantness": 10,
+      "intensity": 4,
+      "description": "Хочется дурачиться и пробовать новое."
+    },
+    {
+      "id": "gordost",
+      "name": "Гордость",
+      "quadrant": "yellow",
+      "energy": 8,
+      "pleasantness": 11,
+      "intensity": 5,
+      "description": "Довольство собой или близкими за достижение."
+    },
+    {
+      "id": "zhizneradostnost",
+      "name": "Жизнерадостность",
+      "quadrant": "yellow",
+      "energy": 8,
+      "pleasantness": 12,
+      "intensity": 6,
+      "description": "Светлое, бодрое отношение ко всему вокруг."
+    },
+    {
+      "id": "lyubopytstvo",
+      "name": "Любопытство",
+      "quadrant": "yellow",
+      "energy": 7,
+      "pleasantness": 7,
+      "intensity": 1,
+      "description": "Тянет узнать, что будет дальше."
+    },
+    {
+      "id": "sobrannost",
+      "name": "Собранность",
+      "quadrant": "yellow",
+      "energy": 7,
+      "pleasantness": 8,
+      "intensity": 2,
+      "description": "Спокойная готовность к делу."
+    },
+    {
+      "id": "vovlechennost",
+      "name": "Вовлечённость",
+      "quadrant": "yellow",
+      "energy": 7,
+      "pleasantness": 9,
+      "intensity": 3,
+      "description": "Ты в процессе, и тебе не всё равно."
+    },
+    {
+      "id": "optimizm",
+      "name": "Оптимизм",
+      "quadrant": "yellow",
+      "energy": 7,
+      "pleasantness": 10,
+      "intensity": 4,
+      "description": "Ожидаешь хорошего от будущего."
+    },
+    {
+      "id": "udovolstvie",
+      "name": "Удовольствие",
+      "quadrant": "yellow",
+      "energy": 7,
+      "pleasantness": 11,
+      "intensity": 5,
+      "description": "Приятно от того, что происходит."
+    },
+    {
+      "id": "vlyublennost",
+      "name": "Влюблённость",
+      "quadrant": "yellow",
+      "energy": 7,
+      "pleasantness": 12,
+      "intensity": 6,
+      "description": "Радостное волнение от человека или мыслей о нём."
+    },
+    {
+      "id": "bespomoschnost",
+      "name": "Беспомощность",
+      "quadrant": "blue",
+      "energy": 6,
+      "pleasantness": 1,
+      "intensity": 6,
+      "description": "Кажется, что ничего не можешь изменить."
+    },
+    {
+      "id": "vina",
+      "name": "Вина",
+      "quadrant": "blue",
+      "energy": 6,
+      "pleasantness": 2,
+      "intensity": 5,
+      "description": "Ощущение собственной неправоты перед другими."
+    },
+    {
+      "id": "razocharovanie",
+      "name": "Разочарование",
+      "quadrant": "blue",
+      "energy": 6,
+      "pleasantness": 3,
+      "intensity": 4,
+      "description": "Ожидания не оправдались."
+    },
+    {
+      "id": "neudovletvorennost",
+      "name": "Неудовлетворённость",
+      "quadrant": "blue",
+      "energy": 6,
+      "pleasantness": 4,
+      "intensity": 3,
+      "description": "Чего-то не хватает, результат не радует."
+    },
+    {
+      "id": "skuka",
+      "name": "Скука",
+      "quadrant": "blue",
+      "energy": 6,
+      "pleasantness": 5,
+      "intensity": 2,
+      "description": "Ничего не интересует, время тянется."
+    },
+    {
+      "id": "otstranennost",
+      "name": "Отстранённость",
+      "quadrant": "blue",
+      "energy": 6,
+      "pleasantness": 6,
+      "intensity": 1,
+      "description": "Будто наблюдаешь за жизнью со стороны."
+    },
+    {
+      "id": "otverzhennost",
+      "name": "Отверженность",
+      "quadrant": "blue",
+      "energy": 5,
+      "pleasantness": 1,
+      "intensity": 6,
+      "description": "Ощущение, что тебя не принимают."
+    },
+    {
+      "id": "podavlennost",
+      "name": "Подавленность",
+      "quadrant": "blue",
+      "energy": 5,
+      "pleasantness": 2,
+      "intensity": 5,
+      "description": "Тяжесть на душе, сил на радость нет."
+    },
+    {
+      "id": "pechal",
+      "name": "Печаль",
+      "quadrant": "blue",
+      "energy": 5,
+      "pleasantness": 3,
+      "intensity": 4,
+      "description": "Тихая грусть о потерянном или несбывшемся."
+    },
+    {
+      "id": "unynie",
+      "name": "Уныние",
+      "quadrant": "blue",
+      "energy": 5,
+      "pleasantness": 4,
+      "intensity": 3,
+      "description": "Всё кажется серым и бессмысленным."
+    },
+    {
+      "id": "handra",
+      "name": "Хандра",
+      "quadrant": "blue",
+      "energy": 5,
+      "pleasantness": 5,
+      "intensity": 2,
+      "description": "Вялое плохое настроение без явной причины."
+    },
+    {
+      "id": "bezrazlichie",
+      "name": "Безразличие",
+      "quadrant": "blue",
+      "energy": 5,
+      "pleasantness": 6,
+      "intensity": 2,
+      "description": "Ничего не трогает."
+    },
+    {
+      "id": "nikchemnost",
+      "name": "Никчёмность",
+      "quadrant": "blue",
+      "energy": 4,
+      "pleasantness": 1,
+      "intensity": 6,
+      "description": "Кажется, что ты ничего не стоишь."
+    },
+    {
+      "id": "odinochestvo",
+      "name": "Одиночество",
+      "quadrant": "blue",
+      "energy": 4,
+      "pleasantness": 2,
+      "intensity": 5,
+      "description": "Не хватает близости и понимания."
+    },
+    {
+      "id": "toska",
+      "name": "Тоска",
+      "quadrant": "blue",
+      "energy": 4,
+      "pleasantness": 3,
+      "intensity": 4,
+      "description": "Щемящая грусть по чему-то или кому-то."
+    },
+    {
+      "id": "grust",
+      "name": "Грусть",
+      "quadrant": "blue",
+      "energy": 4,
+      "pleasantness": 4,
+      "intensity": 3,
+      "description": "Немного печально."
+    },
+    {
+      "id": "melanholiya",
+      "name": "Меланхолия",
+      "quadrant": "blue",
+      "energy": 4,
+      "pleasantness": 5,
+      "intensity": 3,
+      "description": "Задумчивая затяжная грусть."
+    },
+    {
+      "id": "nostalgiya",
+      "name": "Ностальгия",
+      "quadrant": "blue",
+      "energy": 4,
+      "pleasantness": 6,
+      "intensity": 3,
+      "description": "Светлая грусть по прошлому."
+    },
+    {
+      "id": "beznadezhnost",
+      "name": "Безнадёжность",
+      "quadrant": "blue",
+      "energy": 3,
+      "pleasantness": 1,
+      "intensity": 6,
+      "description": "Не видишь выхода и не веришь в лучшее."
+    },
+    {
+      "id": "gore",
+      "name": "Горе",
+      "quadrant": "blue",
+      "energy": 3,
+      "pleasantness": 2,
+      "intensity": 5,
+      "description": "Глубокая боль от утраты."
+    },
+    {
+      "id": "pokinutost",
+      "name": "Покинутость",
+      "quadrant": "blue",
+      "energy": 3,
+      "pleasantness": 3,
+      "intensity": 4,
+      "description": "Ощущение, что тебя оставили."
+    },
+    {
+      "id": "apatiya",
+      "name": "Апатия",
+      "quadrant": "blue",
+      "energy": 3,
+      "pleasantness": 4,
+      "intensity": 4,
+      "description": "Ничего не хочется, нет сил ни на что."
+    },
+    {
+      "id": "razbitost",
+      "name": "Разбитость",
+      "quadrant": "blue",
+      "energy": 3,
+      "pleasantness": 5,
+      "intensity": 4,
+      "description": "Сил нет ни физически, ни морально."
+    },
+    {
+      "id": "ustalost",
+      "name": "Усталость",
+      "quadrant": "blue",
+      "energy": 3,
+      "pleasantness": 6,
+      "intensity": 4,
+      "description": "Нужен отдых."
+    },
+    {
+      "id": "skorb",
+      "name": "Скорбь",
+      "quadrant": "blue",
+      "energy": 2,
+      "pleasantness": 1,
+      "intensity": 6,
+      "description": "Тяжёлая печаль по ушедшему."
+    },
+    {
+      "id": "unizhennost",
+      "name": "Униженность",
+      "quadrant": "blue",
+      "energy": 2,
+      "pleasantness": 2,
+      "intensity": 5,
+      "description": "Задето достоинство, ощущение собственной малости."
+    },
+    {
+      "id": "otsepenenie",
+      "name": "Оцепенение",
+      "quadrant": "blue",
+      "energy": 2,
+      "pleasantness": 3,
+      "intensity": 5,
+      "description": "Чувства будто выключены."
+    },
+    {
+      "id": "vygoranie",
+      "name": "Выгорание",
+      "quadrant": "blue",
+      "energy": 2,
+      "pleasantness": 4,
+      "intensity": 5,
+      "description": "Долгое истощение, дела не приносят ничего."
+    },
+    {
+      "id": "utomlenie",
+      "name": "Утомление",
+      "quadrant": "blue",
+      "energy": 2,
+      "pleasantness": 5,
+      "intensity": 5,
+      "description": "Силы на исходе после нагрузки."
+    },
+    {
+      "id": "vyalost",
+      "name": "Вялость",
+      "quadrant": "blue",
+      "energy": 2,
+      "pleasantness": 6,
+      "intensity": 5,
+      "description": "Всё медленно и через силу."
+    },
+    {
+      "id": "otchayanie",
+      "name": "Отчаяние",
+      "quadrant": "blue",
+      "energy": 1,
+      "pleasantness": 1,
+      "intensity": 6,
+      "description": "Предельная боль и потеря надежды."
+    },
+    {
+      "id": "opustoshennost",
+      "name": "Опустошённость",
+      "quadrant": "blue",
+      "energy": 1,
+      "pleasantness": 2,
+      "intensity": 6,
+      "description": "Внутри пусто, будто всё забрали."
+    },
+    {
+      "id": "obrechennost",
+      "name": "Обречённость",
+      "quadrant": "blue",
+      "energy": 1,
+      "pleasantness": 3,
+      "intensity": 6,
+      "description": "Кажется, что плохой исход неизбежен."
+    },
+    {
+      "id": "istoschenie",
+      "name": "Истощение",
+      "quadrant": "blue",
+      "energy": 1,
+      "pleasantness": 4,
+      "intensity": 6,
+      "description": "Ресурсы полностью исчерпаны."
+    },
+    {
+      "id": "iznemozhenie",
+      "name": "Изнеможение",
+      "quadrant": "blue",
+      "energy": 1,
+      "pleasantness": 5,
+      "intensity": 6,
+      "description": "Предельная усталость, нет сил двигаться."
+    },
+    {
+      "id": "sonlivost",
+      "name": "Сонливость",
+      "quadrant": "blue",
+      "energy": 1,
+      "pleasantness": 6,
+      "intensity": 6,
+      "description": "Клонит в сон, трудно сосредоточиться."
+    },
+    {
+      "id": "zadumchivost",
+      "name": "Задумчивость",
+      "quadrant": "green",
+      "energy": 6,
+      "pleasantness": 7,
+      "intensity": 1,
+      "description": "Спокойно размышляешь о своём."
+    },
+    {
+      "id": "yasnost",
+      "name": "Ясность",
+      "quadrant": "green",
+      "energy": 6,
+      "pleasantness": 8,
+      "intensity": 2,
+      "description": "В голове порядок, всё понятно."
+    },
+    {
+      "id": "doverie",
+      "name": "Доверие",
+      "quadrant": "green",
+      "energy": 6,
+      "pleasantness": 9,
+      "intensity": 3,
+      "description": "Можно положиться на людей рядом."
+    },
+    {
+      "id": "dovolstvo",
+      "name": "Довольство",
+      "quadrant": "green",
+      "energy": 6,
+      "pleasantness": 10,
+      "intensity": 4,
+      "description": "Всё в целом устраивает."
+    },
+    {
+      "id": "sochuvstvie",
+      "name": "Сочувствие",
+      "quadrant": "green",
+      "energy": 6,
+      "pleasantness": 11,
+      "intensity": 5,
+      "description": "Тепло откликаешься на чувства другого."
+    },
+    {
+      "id": "lyubov",
+      "name": "Любовь",
+      "quadrant": "green",
+      "energy": 6,
+      "pleasantness": 12,
+      "intensity": 6,
+      "description": "Глубокая привязанность и тепло к кому-то."
+    },
+    {
+      "id": "mechtatelnost",
+      "name": "Мечтательность",
+      "quadrant": "green",
+      "energy": 5,
+      "pleasantness": 7,
+      "intensity": 2,
+      "description": "Мысли уносятся к приятному."
+    },
+    {
+      "id": "ustoychivost",
+      "name": "Устойчивость",
+      "quadrant": "green",
+      "energy": 5,
+      "pleasantness": 8,
+      "intensity": 2,
+      "description": "Твёрдо стоишь на ногах, что бы ни было."
+    },
+    {
+      "id": "oblegchenie",
+      "name": "Облегчение",
+      "quadrant": "green",
+      "energy": 5,
+      "pleasantness": 9,
+      "intensity": 3,
+      "description": "Отпустило после напряжения."
+    },
+    {
+      "id": "udovletvorennost",
+      "name": "Удовлетворённость",
+      "quadrant": "green",
+      "energy": 5,
+      "pleasantness": 10,
+      "intensity": 4,
+      "description": "Приятно от сделанного и достигнутого."
+    },
+    {
+      "id": "blagodarnost",
+      "name": "Благодарность",
+      "quadrant": "green",
+      "energy": 5,
+      "pleasantness": 11,
+      "intensity": 5,
+      "description": "Ценишь то, что есть, и то, что для тебя сделали."
+    },
+    {
+      "id": "teplota",
+      "name": "Теплота",
+      "quadrant": "green",
+      "energy": 5,
+      "pleasantness": 12,
+      "intensity": 6,
+      "description": "Мягкое доброе чувство к людям рядом."
+    },
+    {
+      "id": "nevozmutimost",
+      "name": "Невозмутимость",
+      "quadrant": "green",
+      "energy": 4,
+      "pleasantness": 7,
+      "intensity": 3,
+      "description": "Ничто не выбивает из равновесия."
+    },
+    {
+      "id": "zaschischennost",
+      "name": "Защищённость",
+      "quadrant": "green",
+      "energy": 4,
+      "pleasantness": 8,
+      "intensity": 3,
+      "description": "Есть опора, и ты в безопасности."
+    },
+    {
+      "id": "komfort",
+      "name": "Комфорт",
+      "quadrant": "green",
+      "energy": 4,
+      "pleasantness": 9,
+      "intensity": 3,
+      "description": "Удобно и приятно."
+    },
+    {
+      "id": "legkost",
+      "name": "Лёгкость",
+      "quadrant": "green",
+      "energy": 4,
+      "pleasantness": 10,
+      "intensity": 4,
+      "description": "Ничего не давит."
+    },
+    {
+      "id": "nezhnost",
+      "name": "Нежность",
+      "quadrant": "green",
+      "energy": 4,
+      "pleasantness": 11,
+      "intensity": 5,
+      "description": "Хочется заботиться и быть мягче."
+    },
+    {
+      "id": "napolnennost",
+      "name": "Наполненность",
+      "quadrant": "green",
+      "energy": 4,
+      "pleasantness": 12,
+      "intensity": 6,
+      "description": "Внутри хватает сил и смысла."
+    },
+    {
+      "id": "terpenie",
+      "name": "Терпение",
+      "quadrant": "green",
+      "energy": 3,
+      "pleasantness": 7,
+      "intensity": 4,
+      "description": "Спокойно ждёшь, не торопя события."
+    },
+    {
+      "id": "prinyatie",
+      "name": "Принятие",
+      "quadrant": "green",
+      "energy": 3,
+      "pleasantness": 8,
+      "intensity": 4,
+      "description": "Принимаешь то, что есть, без борьбы."
+    },
+    {
+      "id": "uyut",
+      "name": "Уют",
+      "quadrant": "green",
+      "energy": 3,
+      "pleasantness": 9,
+      "intensity": 4,
+      "description": "Тепло и хорошо там, где ты сейчас."
+    },
+    {
+      "id": "bezzabotnost",
+      "name": "Беззаботность",
+      "quadrant": "green",
+      "energy": 3,
+      "pleasantness": 10,
+      "intensity": 4,
+      "description": "Никаких тревог, можно просто быть."
+    },
+    {
+      "id": "garmoniya",
+      "name": "Гармония",
+      "quadrant": "green",
+      "energy": 3,
+      "pleasantness": 11,
+      "intensity": 5,
+      "description": "Всё на своих местах, внутри и вокруг."
+    },
+    {
+      "id": "edinenie",
+      "name": "Единение",
+      "quadrant": "green",
+      "energy": 3,
+      "pleasantness": 12,
+      "intensity": 6,
+      "description": "Чувствуешь связь с людьми или миром."
+    },
+    {
+      "id": "spokoystvie",
+      "name": "Спокойствие",
+      "quadrant": "green",
+      "energy": 2,
+      "pleasantness": 7,
+      "intensity": 5,
+      "description": "Ровно и тихо внутри."
+    },
+    {
+      "id": "bezopasnost",
+      "name": "Безопасность",
+      "quadrant": "green",
+      "energy": 2,
+      "pleasantness": 8,
+      "intensity": 5,
+      "description": "Ничто не угрожает."
+    },
+    {
+      "id": "pokoy",
+      "name": "Покой",
+      "quadrant": "green",
+      "energy": 2,
+      "pleasantness": 9,
+      "intensity": 5,
+      "description": "Можно остановиться и ничего не делать."
+    },
+    {
+      "id": "rasslablennost",
+      "name": "Расслабленность",
+      "quadrant": "green",
+      "energy": 2,
+      "pleasantness": 10,
+      "intensity": 5,
+      "description": "Тело и голова отпустили напряжение."
+    },
+    {
+      "id": "umirotvorenie",
+      "name": "Умиротворение",
+      "quadrant": "green",
+      "energy": 2,
+      "pleasantness": 11,
+      "intensity": 5,
+      "description": "Глубокий тихий мир внутри."
+    },
+    {
+      "id": "blazhenstvo",
+      "name": "Блаженство",
+      "quadrant": "green",
+      "energy": 2,
+      "pleasantness": 12,
+      "intensity": 6,
+      "description": "Полное тихое наслаждение."
+    },
+    {
+      "id": "nespeshnost",
+      "name": "Неспешность",
+      "quadrant": "green",
+      "energy": 1,
+      "pleasantness": 7,
+      "intensity": 6,
+      "description": "Никуда не нужно торопиться."
+    },
+    {
+      "id": "dremota",
+      "name": "Дремота",
+      "quadrant": "green",
+      "energy": 1,
+      "pleasantness": 8,
+      "intensity": 6,
+      "description": "Приятная сонная расслабленность."
+    },
+    {
+      "id": "istoma",
+      "name": "Истома",
+      "quadrant": "green",
+      "energy": 1,
+      "pleasantness": 9,
+      "intensity": 6,
+      "description": "Сладкая разморённость."
+    },
+    {
+      "id": "nega",
+      "name": "Нега",
+      "quadrant": "green",
+      "energy": 1,
+      "pleasantness": 10,
+      "intensity": 6,
+      "description": "Ленивое наслаждение покоем."
+    },
+    {
+      "id": "bezmyatezhnost",
+      "name": "Безмятежность",
+      "quadrant": "green",
+      "energy": 1,
+      "pleasantness": 11,
+      "intensity": 6,
+      "description": "Ничто не тревожит, полная тишина внутри."
+    },
+    {
+      "id": "blagodat",
+      "name": "Благодать",
+      "quadrant": "green",
+      "energy": 1,
+      "pleasantness": 12,
+      "intensity": 6,
+      "description": "Тихое ощущение, что всё хорошо как есть."
+    }
+  ]
+}
