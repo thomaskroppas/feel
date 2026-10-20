@@ -1,0 +1,3 @@
+# crontab -e  (или «Планировщик заданий» в панели reg.ru)
+# Рассылка уведомлений раз в 5 минут.
+*/5 * * * * cd $HOME/feel && venv/bin/python -m app.cli send-due >> var/cron.log 2>&1

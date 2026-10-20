@@ -1,0 +1,9 @@
+# Скопируйте в корневую папку сайта как .htaccess (рядом с passenger_wsgi.py).
+# Путь к Python — из виртуального окружения проекта; uXXXXXXX — ваш логин на reg.ru.
+PassengerEnabled On
+PassengerPython /var/www/uXXXXXXX/data/feel/venv/bin/python
+
+# Только HTTPS (сертификат Let's Encrypt выпускается в панели reg.ru).
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
