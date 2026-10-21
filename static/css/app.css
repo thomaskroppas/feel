@@ -25,8 +25,9 @@
   color-scheme: light dark;
 }
 
+/* Тёмная тема: по системной настройке или выбранная в приложении (data-theme на <html>). */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #111110;
     --surface: #1C1B1A;
     --surface-2: #2A2927;
@@ -36,8 +37,22 @@
     --primary: #F2F0EC;
     --on-primary: #111110;
     --danger: #FF6B70;
+    color-scheme: dark;
   }
 }
+:root[data-theme="dark"] {
+  --bg: #111110;
+  --surface: #1C1B1A;
+  --surface-2: #2A2927;
+  --text: #F2F0EC;
+  --text-2: #A39F98;
+  --line: rgba(242, 240, 236, 0.1);
+  --primary: #F2F0EC;
+  --on-primary: #111110;
+  --danger: #FF6B70;
+  color-scheme: dark;
+}
+:root[data-theme="light"] { color-scheme: light; }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
@@ -374,3 +389,7 @@ textarea.input { min-height: 110px; resize: vertical; line-height: 1.45; }
 .facts .fact, .report > .fact { padding: 10px 0; border-bottom: 1px solid var(--line); }
 .facts .fact:last-child { border-bottom: 0; }
 details.few summary { cursor: pointer; color: var(--text-2); font-size: 14px; padding: 10px 0 4px; min-height: var(--tap); display: flex; align-items: center; }
+
+.segmented { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: var(--surface-2); border-radius: var(--radius-s); padding: 4px; }
+.segmented button { min-height: var(--tap); border: 0; border-radius: 10px; background: transparent; font-size: 15px; font-weight: 600; cursor: pointer; color: var(--text-2); }
+.segmented button[aria-pressed="true"] { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,.08); }

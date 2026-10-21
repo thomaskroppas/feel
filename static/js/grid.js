@@ -111,6 +111,7 @@ export async function openPicker(opts) {
   paint();
   const scheme = window.matchMedia('(prefers-color-scheme: dark)');
   scheme.addEventListener('change', paint);
+  window.addEventListener('feel-theme', paint);
 
   // ---------- Карточка ----------
   const wordTitle = h('div', { class: 'word-title' });
@@ -240,6 +241,7 @@ export async function openPicker(opts) {
   function close(viaBack) {
     document.removeEventListener('gesturestart', stopGesture);
     scheme.removeEventListener('change', paint);
+    window.removeEventListener('feel-theme', paint);
     screen.remove();
     if (viaBack && opts.onClose) opts.onClose();
   }

@@ -2,7 +2,7 @@ import { api } from '../api.js';
 import { currentUser, onLoggedOut } from '../app.js';
 import * as push from '../push.js';
 import { invalidateTags } from '../store.js';
-import { add, confirmSheet, h, showError, switchRow, toast } from '../ui.js';
+import { add, confirmSheet, getTheme, h, setTheme, showError, switchRow, toast } from '../ui.js';
 
 const REPEAT_OPTIONS = [30, 45, 60, 90, 120];
 
@@ -150,6 +150,15 @@ export default async function settings(view) {
     usageText.textContent = `Фото и голос занимают ${mb(u.used)} МБ из ${Math.round(u.quota / 1024 / 1024)} МБ.`;
   }).catch(() => {});
 
+  // ---------- Оформление ----------
+  const themes = [['system', 'Как в системе'], ['light', 'Светлая'], ['dark', 'Тёмная']];
+  const themeBox = h('div', { class: 'segmented', role: 'radiogroup', 'aria-label': 'Тема' });
+  const drawThemes = () => themeBox.replaceChildren(...themes.map(([key, label]) => h('button', {
+    role: 'radio', 'aria-checked': String(getTheme() === key), 'aria-pressed': String(getTheme() === key),
+    onclick: () => { setTheme(key); drawThemes(); },
+  }, label)));
+  drawThemes();
+
   const user = currentUser();
   add(view,
     h('h1', {}, 'Настройки'),
@@ -160,6 +169,9 @@ export default async function settings(view) {
     h('div', { class: 'card' },
       switchRow('Повторить, если не отмечено', st.repeat_enabled, (v) => { repeatDetails.hidden = !v; save({ repeat_enabled: v }); }),
       repeatDetails),
+
+    h('div', { class: 'section-title', style: { marginTop: '24px' } }, 'Оформление'),
+    h('div', { class: 'card' }, themeBox),
 
     h('div', { class: 'section-title', style: { marginTop: '24px' } }, 'Часовой пояс'),
     h('div', { class: 'card' }, tzSelect, detectBtn),

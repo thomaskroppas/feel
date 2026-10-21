@@ -47,6 +47,24 @@ export function showError(e) {
   toast(e && e.message ? e.message : 'Что-то пошло не так', 3200);
 }
 
+const THEME_KEY = 'feel.theme';
+
+export function getTheme() {
+  try { return localStorage.getItem(THEME_KEY) || 'system'; } catch (e) { return 'system'; }
+}
+
+export function applyTheme(theme = getTheme()) {
+  const root = document.documentElement;
+  if (theme === 'light' || theme === 'dark') root.dataset.theme = theme;
+  else delete root.dataset.theme;
+  window.dispatchEvent(new Event('feel-theme'));
+}
+
+export function setTheme(theme) {
+  try { localStorage.setItem(THEME_KEY, theme); } catch (e) { /* нет хранилища */ }
+  applyTheme(theme);
+}
+
 export const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function isStandalone() {

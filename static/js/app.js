@@ -2,7 +2,7 @@
 import { api, setUnauthorizedHandler } from './api.js';
 import * as push from './push.js';
 import { clearAll } from './store.js';
-import { isIOS, isStandalone } from './ui.js';
+import { applyTheme, isIOS, isStandalone } from './ui.js';
 
 import analytics from './screens/analytics.js';
 import checkin from './screens/checkin.js';
@@ -16,6 +16,8 @@ import settings from './screens/settings.js';
 import tags from './screens/tags.js';
 import today from './screens/today.js';
 import welcome from './screens/welcome.js';
+
+applyTheme();
 
 const ROUTES = [
   { re: /^\/$/, screen: today, tab: 'today' },
