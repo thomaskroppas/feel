@@ -1,3 +1,5 @@
+from logging.config import fileConfig
+
 from alembic import context
 
 from app import models  # noqa: F401  — регистрирует таблицы в Base.metadata
@@ -5,6 +7,8 @@ from app import db as app_db
 from app.config import settings
 
 config = context.config
+if config.config_file_name is not None:
+    fileConfig(config.config_file_name, disable_existing_loggers=False)
 target_metadata = app_db.Base.metadata
 
 
