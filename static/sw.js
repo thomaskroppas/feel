@@ -1,5 +1,5 @@
 /* Service worker: оболочка приложения в кэше и показ уведомлений. */
-const VERSION = 'feel-v1';
+const VERSION = 'feel-v2';
 const SHELL = [
   '/', '/index.html', '/manifest.webmanifest', '/css/app.css',
   '/js/app.js', '/js/api.js', '/js/ui.js', '/js/store.js', '/js/push.js', '/js/grid.js',
@@ -56,7 +56,7 @@ self.addEventListener('fetch', (event) => {
 self.addEventListener('push', (event) => {
   let data = {};
   try { data = event.data ? event.data.json() : {}; } catch (e) { data = {}; }
-  const title = data.title || 'feel';
+  const title = data.title || 'Feel';
   const options = {
     body: data.body || 'Как ты себя чувствуешь?',
     tag: data.tag || 'feel',

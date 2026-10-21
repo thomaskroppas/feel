@@ -31,7 +31,7 @@ export default function login(view) {
   add(view,
     h('div', { class: 'logo', 'aria-hidden': 'true' },
       ['red', 'yellow', 'blue', 'green'].map((q) => h('i', { style: { background: `var(--q-${q})` } }))),
-    h('h1', {}, 'feel'),
+    h('h1', {}, 'Feel'),
     h('p', { class: 'subtitle' }, 'Дневник эмоций'),
     form);
 }

@@ -27,7 +27,7 @@ KINDS = {
     "morning": {"screen": "/morning", "done": morning_done},
     "evening": {"screen": "/evening", "done": evening_done},
 }
-TITLE = "feel"
+TITLE = push.APP_NAME
 
 
 @dataclass
