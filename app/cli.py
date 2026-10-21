@@ -6,7 +6,7 @@
 Пароль спрашивается без отображения. Если терминал этого не умеет (веб-shell
 в панели хостинга), передайте его через переменную окружения FEEL_PASSWORD.
     python -m app.cli gen-vapid
-    python -m app.cli send-due          # запускается cron раз в 5 минут
+    python -m app.cli send-due          # запускается cron раз в минуту
 """
 import argparse
 import base64

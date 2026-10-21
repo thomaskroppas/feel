@@ -26,4 +26,4 @@ quota -s 2>/dev/null || echo "(quota недоступна — лимит смо�
 
 echo
 echo "== Cron =="
-command -v crontab >/dev/null && echo "crontab есть; минимальный интервал смотрите в панели (нужно раз в 5 минут)" || echo "crontab не найден — настраивать через панель"
+command -v crontab >/dev/null && echo "crontab есть; минимальный интервал смотрите в панели (нужно раз в минуту)" || echo "crontab не найден — настраивать через панель"
