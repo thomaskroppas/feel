@@ -187,6 +187,8 @@ class NotificationLog(Base):
     local_date: Mapped[date] = mapped_column(Date, nullable=False)
     sent_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, nullable=False)
     status: Mapped[str] = mapped_column(String(20), nullable=False)
+    # Когда приложение открыло экран по этому уведомлению (см. /api/notifications/pending).
+    opened_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
 
     __table_args__ = (UniqueConstraint("user_id", "kind", "local_date", name="uq_notification_log"),)
 

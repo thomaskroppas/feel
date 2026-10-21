@@ -107,6 +107,7 @@ export async function render() {
 
 export function onLoggedIn(user) {
   me = user;
+  setTimeout(checkServerPending, 500);
   push.resync();
   let onboarded = false;
   try { onboarded = localStorage.getItem('feel.onboarded') === '1'; } catch (e) { /* нет хранилища */ }
@@ -178,6 +179,31 @@ async function followPendingNav() {
   return true;
 }
 
+// Недавнее уведомление, на которое ещё не отреагировали, — спрашиваем у сервера.
+// Это работает, даже если iOS не передала приложению, что его открыли тапом.
+let serverCheck = null;
+function checkServerPending() {
+  if (!me || serverCheck) return serverCheck;
+  serverCheck = (async () => {
+    try {
+      const { pending } = await api.get('/api/notifications/pending');
+      if (!pending) return false;
+      const { path } = parseHash();
+      // Не перебиваем незаконченную отметку и первичную настройку.
+      if (path === '/checkin' || path === '/welcome' || document.querySelector('.grid-screen')) return false;
+      const target = pending.hash.replace(/^#/, '').split('?')[0];
+      if (path !== target) { removeOverlays(); go(pending.hash); }
+      api.post(`/api/notifications/${pending.id}/opened`).catch(() => {});
+      return true;
+    } catch (e) {
+      return false;
+    } finally {
+      serverCheck = null;
+    }
+  })();
+  return serverCheck;
+}
+
 // iOS показывает приложение раньше, чем service worker успевает записать адрес,
 // поэтому после возвращения на экран проверяем несколько раз в течение ~7 секунд.
 let navPolling = false;
@@ -199,6 +225,7 @@ async function pollPendingNav() {
 let hiddenAt = 0;
 document.addEventListener('visibilitychange', async () => {
   if (document.hidden) { hiddenAt = Date.now(); return; }
+  if (await checkServerPending()) return;
   if (await pollPendingNav()) return;
   if (hiddenAt && Date.now() - hiddenAt > 10 * 60 * 1000 && !document.querySelector('.grid-screen')) {
     const { path } = parseHash();
@@ -207,7 +234,7 @@ document.addEventListener('visibilitychange', async () => {
 });
 
 window.addEventListener('focus', () => { pollPendingNav(); });
-window.addEventListener('pageshow', () => { pollPendingNav(); });
+window.addEventListener('pageshow', () => { checkServerPending(); pollPendingNav(); });
 
 (async () => {
   // Приложение запустили тапом по уведомлению — сразу открываем нужный экран.
@@ -218,5 +245,5 @@ window.addEventListener('pageshow', () => { pollPendingNav(); });
   }
   await render();
   if (me) push.resync();
-  pollPendingNav();
+  if (!(await checkServerPending())) pollPendingNav();
 })();

@@ -221,3 +221,37 @@ def test_send_due_writes_own_log(user, fake_push, monkeypatch):
     assert main(["send-due"]) == 0
     text = (settings.var_dir / "notify.log").read_text()
     assert "morning: sent" in text
+
+
+def test_pending_notification_opens_screen_once(client_for, db, fake_push):
+    from app.timeutil import utcnow
+    a = client_for("pend@example.com")
+    b = client_for("pend2@example.com")
+    uid = db.scalar(__import__("sqlalchemy").select(models.User.id).where(models.User.email == "pend@example.com"))
+    today = a.get("/api/today").json()["date"]
+    assert a.get("/api/notifications/pending").json() == {"pending": None}
+    db.add(models.NotificationLog(user_id=uid, kind="evening", local_date=date.fromisoformat(today),
+                                  sent_at=utcnow(), status="sent"))
+    db.commit()
+    p = a.get("/api/notifications/pending").json()["pending"]
+    assert p["hash"] == f"#/evening?d={today}"
+    assert b.get("/api/notifications/pending").json() == {"pending": None}
+    assert b.post(f"/api/notifications/{p['id']}/opened").status_code == 404
+    assert a.post(f"/api/notifications/{p['id']}/opened").status_code == 200
+    assert a.get("/api/notifications/pending").json() == {"pending": None}
+
+
+def test_pending_ignored_when_done_or_old(client_for, db, fake_push):
+    from datetime import timedelta
+    from app.timeutil import utcnow
+    a = client_for("pend3@example.com")
+    uid = db.scalar(__import__("sqlalchemy").select(models.User.id).where(models.User.email == "pend3@example.com"))
+    today = date.fromisoformat(a.get("/api/today").json()["date"])
+    db.add(models.NotificationLog(user_id=uid, kind="morning", local_date=today,
+                                  sent_at=utcnow() - timedelta(minutes=90), status="sent"))
+    db.add(models.NotificationLog(user_id=uid, kind="evening", local_date=today,
+                                  sent_at=utcnow(), status="sent"))
+    db.commit()
+    assert a.get("/api/notifications/pending").json()["pending"]["kind"] == "evening"
+    a.post("/api/checkins", {"emotion_id": "pokoy", "source": "evening"})
+    assert a.get("/api/notifications/pending").json() == {"pending": None}

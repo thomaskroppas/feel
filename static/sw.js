@@ -1,5 +1,5 @@
 /* Service worker: оболочка приложения в кэше и показ уведомлений. */
-const VERSION = 'feel-v6';
+const VERSION = 'feel-v7';
 // Отдельный кэш для адреса экрана из уведомления — его не трогает смена версии.
 const NAV_CACHE = 'feel-nav';
 const NAV_KEY = '/__pending-nav';

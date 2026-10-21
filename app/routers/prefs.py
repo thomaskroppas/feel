@@ -1,10 +1,11 @@
 """Настройки пользователя и подписки на уведомления."""
 import re
+from datetime import timedelta
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field, field_validator
-from sqlalchemy import delete, select
+from sqlalchemy import delete, select, update
 from sqlalchemy.orm import Session
 
 from .. import models
@@ -12,6 +13,7 @@ from ..config import settings
 from ..db import get_db
 from ..security import current_user
 from ..services import push
+from ..services.days import evening_done, morning_done
 from ..timeutil import all_timezones, is_valid_tz, local_date_of, utcnow
 
 router = APIRouter(prefix="/api", tags=["prefs"])
@@ -168,3 +170,48 @@ def push_test(db: Session = Depends(get_db), user: models.User = Depends(current
                                 push.screen_url("/"), f"test {stamp}", "test")
     r = push.send_to_user(db, user.id, payload)
     return {"sent": r.sent, "failed": r.failed, "removed": r.removed}
+
+
+# --------------------------------------------------------------------------- #
+# Экран по недавнему уведомлению
+# --------------------------------------------------------------------------- #
+# iOS не сообщает приложению, что его открыли тапом по уведомлению. Поэтому
+# приложение при каждом появлении на экране спрашивает сервер: было ли недавно
+# уведомление, на которое ещё не отреагировали, — и открывает нужный экран.
+PENDING_WINDOW_MIN = 60
+PENDING_SCREENS = {"morning": "/morning", "morning_repeat": "/morning",
+                   "evening": "/evening", "evening_repeat": "/evening"}
+
+
+@router.get("/notifications/pending")
+def pending_notification(db: Session = Depends(get_db), user: models.User = Depends(current_user)):
+    since = utcnow() - timedelta(minutes=PENDING_WINDOW_MIN)
+    entry = db.scalar(select(models.NotificationLog).where(
+        models.NotificationLog.user_id == user.id,
+        models.NotificationLog.kind.in_(PENDING_SCREENS),
+        models.NotificationLog.status == "sent",
+        models.NotificationLog.opened_at.is_(None),
+        models.NotificationLog.sent_at >= since,
+    ).order_by(models.NotificationLog.sent_at.desc()).limit(1))
+    if entry is None:
+        return {"pending": None}
+    done = morning_done if entry.kind.startswith("morning") else evening_done
+    if done(db, user.id, entry.local_date):
+        return {"pending": None}
+    return {"pending": {"id": entry.id, "kind": entry.kind,
+                        "hash": f"#{PENDING_SCREENS[entry.kind]}?d={entry.local_date.isoformat()}"}}
+
+
+@router.post("/notifications/{log_id}/opened")
+def notification_opened(log_id: int, db: Session = Depends(get_db),
+                        user: models.User = Depends(current_user)):
+    entry = db.get(models.NotificationLog, log_id)
+    if entry is None or entry.user_id != user.id:
+        raise HTTPException(status_code=404, detail="Не найдено")
+    # Закрываем и это, и более ранние уведомления того же дня — второй раз не перебрасываем.
+    db.execute(update(models.NotificationLog).where(
+        models.NotificationLog.user_id == user.id,
+        models.NotificationLog.local_date == entry.local_date,
+        models.NotificationLog.opened_at.is_(None)).values(opened_at=utcnow()))
+    db.commit()
+    return {"ok": True}
