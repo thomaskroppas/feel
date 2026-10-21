@@ -4,7 +4,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field, field_validator
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
 from .. import models
@@ -12,7 +12,7 @@ from ..config import settings
 from ..db import get_db
 from ..security import current_user
 from ..services import push
-from ..timeutil import all_timezones, is_valid_tz, utcnow
+from ..timeutil import all_timezones, is_valid_tz, local_date_of, utcnow
 
 router = APIRouter(prefix="/api", tags=["prefs"])
 
@@ -68,9 +68,18 @@ def get_settings(db: Session = Depends(get_db), user: models.User = Depends(curr
 def put_settings(body: SettingsIn, db: Session = Depends(get_db),
                  user: models.User = Depends(current_user)):
     st = db.get(models.UserSettings, user.id)
-    for field, value in body.model_dump(exclude_unset=True).items():
-        if value is not None:
-            setattr(st, field, value)
+    changes = {f: v for f, v in body.model_dump(exclude_unset=True).items() if v is not None}
+    # Новое время утра или вечера — сегодняшнее уведомление можно получить заново.
+    retime = [k for k in ("morning", "evening")
+              if f"{k}_time" in changes and changes[f"{k}_time"] != getattr(st, f"{k}_time")]
+    for field, value in changes.items():
+        setattr(st, field, value)
+    if retime:
+        today = local_date_of(utcnow(), st.timezone)
+        kinds = retime + [f"{k}_repeat" for k in retime]
+        db.execute(delete(models.NotificationLog).where(
+            models.NotificationLog.user_id == user.id, models.NotificationLog.local_date == today,
+            models.NotificationLog.kind.in_(kinds)))
     db.commit()
     return _out(st)
 

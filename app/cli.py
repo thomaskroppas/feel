@@ -15,6 +15,7 @@ import getpass
 import logging
 import os
 import sys
+from datetime import datetime
 
 from sqlalchemy import select
 
@@ -115,8 +116,14 @@ def cmd_send_due(args) -> int:
         return 0  # предыдущий запуск ещё идёт
     db = _db()
     try:
-        for s in run_due(db):
-            print(f"{s.local_date} user={s.user_id} {s.kind}: {s.status}", flush=True)
+        results = run_due(db)
+        if results:
+            # Свой журнал отправок — не зависит от того, куда cron перенаправляет вывод.
+            stamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            lines = [f"{stamp} {s.local_date} user={s.user_id} {s.kind}: {s.status}" for s in results]
+            with open(settings.var_dir / "notify.log", "a", encoding="utf-8") as f:
+                f.write("\n".join(lines) + "\n")
+            print("\n".join(lines), flush=True)
     finally:
         db.close()
         lock.close()

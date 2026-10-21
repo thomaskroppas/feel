@@ -13,6 +13,7 @@ import install from './screens/install.js';
 import login from './screens/login.js';
 import morning from './screens/morning.js';
 import settings from './screens/settings.js';
+import tags from './screens/tags.js';
 import today from './screens/today.js';
 import welcome from './screens/welcome.js';
 
@@ -25,6 +26,7 @@ const ROUTES = [
   { re: /^\/day\/(\d{4}-\d{2}-\d{2})$/, screen: day, tab: 'diary' },
   { re: /^\/analytics$/, screen: analytics, tab: 'analytics' },
   { re: /^\/settings$/, screen: settings, tab: 'settings' },
+  { re: /^\/tags$/, screen: tags, tab: 'settings' },
   { re: /^\/welcome$/, screen: welcome, full: true },
 ];
 
@@ -120,6 +122,10 @@ setUnauthorizedHandler(() => {
 });
 
 window.addEventListener('hashchange', render);
+
+// Страница не приближается щипком (сетка эмоций приближается сама, своими средствами).
+// Двойной тап отключён в CSS (touch-action: manipulation).
+document.addEventListener('gesturestart', (e) => e.preventDefault());
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(() => {});

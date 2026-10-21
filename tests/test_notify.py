@@ -188,3 +188,36 @@ def test_subscription_moves_to_new_owner(client_for, db):
 def test_cli_send_due_runs(user, fake_push, capsys):
     from app.cli import main
     assert main(["send-due"]) == 0
+
+
+def test_changing_time_allows_new_notification_today(client_for, fake_push):
+    from datetime import datetime, timedelta
+    from zoneinfo import ZoneInfo
+    a = client_for("retime@example.com")
+    a.post("/api/push/subscriptions", {"endpoint": "https://push.example/r", "keys": {"p256dh": "k", "auth": "x"}})
+    now = datetime.now(ZoneInfo("Europe/Moscow"))
+    if now.hour == 0 and now.minute < 3:
+        import pytest
+        pytest.skip("около полуночи дата меняется")
+    hhmm = (now - timedelta(minutes=1)).strftime("%H:%M")
+    a.put("/api/settings", {"evening_time": hhmm})
+    from app import db as D
+    s = D.SessionLocal()
+    sent = [r.kind for r in run_due(s)]
+    assert "evening" in sent
+    assert "evening" not in [r.kind for r in run_due(s)]
+    later = (now - timedelta(minutes=0)).strftime("%H:%M")
+    if later != hhmm:
+        a.put("/api/settings", {"evening_time": later})
+        assert "evening" in [r.kind for r in run_due(s)]
+    s.close()
+
+
+def test_send_due_writes_own_log(user, fake_push, monkeypatch):
+    from app.cli import main
+    from app.config import settings
+    from app.services import notify
+    monkeypatch.setattr(notify, "utcnow", lambda: utc(5, 32))
+    assert main(["send-due"]) == 0
+    text = (settings.var_dir / "notify.log").read_text()
+    assert "morning: sent" in text
