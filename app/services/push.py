@@ -14,8 +14,6 @@ from ..timeutil import utcnow
 log = logging.getLogger("feel.push")
 
 TTL_SECONDS = 2 * 3600
-# Заголовок уведомления — название приложения, как у значка на экране «Домой».
-APP_NAME = "Feel"
 
 
 class PushGone(Exception):

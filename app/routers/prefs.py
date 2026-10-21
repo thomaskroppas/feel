@@ -155,7 +155,7 @@ def push_test(db: Session = Depends(get_db), user: models.User = Depends(current
     if not settings.vapid_private_key:
         raise HTTPException(status_code=503, detail="На сервере не настроены ключи VAPID")
     stamp = utcnow().strftime("%H%M%S")
-    payload = push.make_payload(push.APP_NAME, "Тестовое уведомление: всё работает",
+    payload = push.make_payload("Проверка", "Тестовое уведомление: всё работает",
                                 push.screen_url("/"), f"test {stamp}", "test")
     r = push.send_to_user(db, user.id, payload)
     return {"sent": r.sent, "failed": r.failed, "removed": r.removed}

@@ -34,6 +34,7 @@ def test_morning_sent_on_time_once(user, db, fake_push):
     assert payload["url"] == "https://feel.example/#/morning?d=2026-10-20"
     assert payload["tag"] == "morning 2026-10-20 https://feel.example/#/morning?d=2026-10-20"
     assert payload["body"].startswith("Ты составил план")
+    assert payload["title"] == "Утро"
     assert run_due(db, utc(5, 37)) == []  # дублей нет
     assert len(fake_push.sent) == 1
 
@@ -104,7 +105,8 @@ def test_manual_checkin_does_not_cancel_evening(user, db, fake_push):
     db.commit()
     res = run_due(db, utc(18, 32))
     assert kinds(res) == [("evening", "2026-10-20", "sent")]
-    assert json.loads(fake_push.sent[0][1])["url"].endswith("/#/evening?d=2026-10-20")
+    payload = json.loads(fake_push.sent[0][1])
+    assert payload["url"].endswith("/#/evening?d=2026-10-20") and payload["title"] == "Вечер"
 
 
 def test_evening_after_local_midnight_belongs_to_previous_day(user, db, fake_push):

@@ -27,7 +27,8 @@ KINDS = {
     "morning": {"screen": "/morning", "done": morning_done},
     "evening": {"screen": "/evening", "done": evening_done},
 }
-TITLE = push.APP_NAME
+# Название приложения iOS показывает сама («from Feel»), поэтому в заголовке — суть уведомления.
+TITLES = {"morning": "Утро", "evening": "Вечер", "plan": "План на день"}
 
 
 @dataclass
@@ -80,7 +81,7 @@ def _send(db: Session, st: models.UserSettings, kind: str, d: date, log_kind: st
     text = st.morning_text if kind == "morning" else st.evening_text
     url = push.screen_url(f"{KINDS[kind]['screen']}?d={d.isoformat()}")
     # Повтор идёт с тем же tag, что и основное, и заменяет его на экране.
-    payload = push.make_payload(TITLE, text, url, f"{kind} {d.isoformat()}", log_kind)
+    payload = push.make_payload(TITLES[kind], text, url, f"{kind} {d.isoformat()}", log_kind)
     result = push.send_to_user(db, st.user_id, payload)
     entry.status = result.status
     db.commit()
@@ -144,7 +145,7 @@ def _process_plan_reminders(db: Session, now: datetime) -> List[Sent]:
             continue
         d = row.local_date
         url = push.screen_url(f"/morning?d={d.isoformat()}")
-        payload = push.make_payload(TITLE, "Пора выделить 30 минут на план дня", url,
+        payload = push.make_payload(TITLES["plan"], "Пора выделить 30 минут на план дня", url,
                                     f"plan {d.isoformat()}", "plan")
         result = push.send_to_user(db, row.user_id, payload)
         out.append(Sent(row.user_id, "plan", d, result.status))
