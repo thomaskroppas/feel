@@ -44,6 +44,23 @@ export async function request(method, url, body) {
   return data;
 }
 
+// Загрузка файла (multipart). Content-Type с границей ставит сам браузер.
+export async function upload(url, formData) {
+  let res;
+  try {
+    res = await fetch(url, {
+      method: 'POST', credentials: 'same-origin', body: formData,
+      headers: { 'X-Requested-With': 'feel', 'X-CSRF-Token': csrfToken() },
+    });
+  } catch (e) {
+    throw new ApiError(0, 'Нет связи с сервером');
+  }
+  const data = (res.headers.get('content-type') || '').includes('json') ? await res.json() : null;
+  if (res.status === 401) onUnauthorized();
+  if (!res.ok) throw new ApiError(res.status, messageOf(data, res.status));
+  return data;
+}
+
 export const api = {
   get: (url) => request('GET', url),
   post: (url, body = {}) => request('POST', url, body),

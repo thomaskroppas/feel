@@ -1,5 +1,6 @@
 // Вечер: утренний план, отметка эмоции, итоги дня, спорт.
 import { api } from '../api.js';
+import { mediaEditor } from '../media.js';
 import { go } from '../app.js';
 import { add, h, fmtDayLong, showError, toast, topbar } from '../ui.js';
 
@@ -50,11 +51,16 @@ export default async function evening(view, params) {
           if (body && (body.day_summary || 'sport_type' in body)) {
             try { await api.put(`/api/days/${date}`, body); } catch (e) { /* сохранится позже */ }
           }
+          if (voice.hasChanges()) {
+            try { await voice.commit({ day_log_date: date }); } catch (e) { showError(e); return; }
+          }
           go(checkinHref);
         },
       }, 'Отметить эмоцию'));
 
   // ---------- Итоги ----------
+  // Итоги дня — текстом или голосом.
+  const voice = mediaEditor({ existing: day.media || [], photos: false, voice: true, voiceLabel: 'Итоги голосом' });
   const summary = h('textarea', { class: 'input', placeholder: 'Как прошёл день? Что запомнилось?', maxlength: '20000' });
   summary.value = state.day_summary;
   summary.addEventListener('input', () => { state.day_summary = summary.value; });
@@ -110,6 +116,7 @@ export default async function evening(view, params) {
       saveBtn.disabled = true;
       try {
         await api.put(`/api/days/${date}`, body);
+        if (voice.hasChanges()) await voice.commit({ day_log_date: date });
         toast('Сохранено');
         go('#/', true);
       } catch (e) { showError(e); saveBtn.disabled = false; }
@@ -122,7 +129,9 @@ export default async function evening(view, params) {
     h('p', { class: 'subtitle' }, fmtDayLong(date)),
     planCard,
     emotionCard,
-    h('div', { class: 'card' }, h('h3', {}, 'Итоги дня'), summary),
+    h('div', { class: 'card' }, h('h3', {}, 'Итоги дня'), summary, h('div', { style: { marginTop: '12px' } }, voice.el)),
     h('div', { class: 'card' }, h('h3', {}, 'Спорт'), h('div', { class: 'choice' }, was, wasnt), sportDetails),
     h('div', { class: 'sticky-bottom' }, saveBtn));
+
+  return () => voice.dispose();
 }

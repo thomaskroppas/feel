@@ -1,6 +1,7 @@
 // День целиком: утро, отметки, вечер, сон, спорт.
 import { api } from '../api.js';
 import { add, h, fmtDayLong, fmtHours, topbar } from '../ui.js';
+import { mediaPreview } from '../media.js';
 import { entryRow } from './diary.js';
 
 function kv(k, v) {
@@ -40,6 +41,7 @@ export default async function day(view, params, match) {
       h('div', { class: 'k muted', style: { marginBottom: '6px' } }, 'Итоги дня'),
       h('div', { class: 'pre', style: { marginBottom: '10px' } }, log.day_summary || '—'),
       kv('Спорт', sport)),
+    d.media && d.media.length ? h('div', { class: 'card' }, mediaPreview(d.media, { large: true })) : null,
 
     h('a', { class: 'btn block', href: `#/checkin`, style: { marginTop: '12px' } }, 'Отметиться сейчас'));
 }

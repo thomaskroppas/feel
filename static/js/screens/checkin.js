@@ -3,6 +3,7 @@
 import { api } from '../api.js';
 import { go } from '../app.js';
 import { openPicker, wordColors } from '../grid.js';
+import { mediaEditor } from '../media.js';
 import { emotions, GROUPS, invalidateTags, tags as loadTags } from '../store.js';
 import { confirmSheet, fill, h, showError, toast, topbar } from '../ui.js';
 
@@ -29,6 +30,17 @@ export default async function checkin(view, params) {
     note: editing ? editing.note : '',
   };
   let picker = null;
+  let attachments = null; // создаётся на шаге «Контекст» и живёт до ухода с экрана
+
+  // Файлы грузятся после сохранения записи: им нужен её id.
+  async function commitMedia(checkinId) {
+    if (!attachments || !attachments.hasChanges()) return;
+    try {
+      await attachments.commit({ checkin_id: checkinId });
+    } catch (e) {
+      showError(new Error(`Запись сохранена, но файл не загрузился: ${e.message}`));
+    }
+  }
 
   async function save() {
     const body = { emotion_id: state.emotionId, note: state.note, tag_ids: [...state.tagIds] };
@@ -36,11 +48,13 @@ export default async function checkin(view, params) {
     try {
       if (editing) {
         await api.patch(`/api/checkins/${editing.id}`, body);
+        await commitMedia(editing.id);
         toast('Сохранено');
         if (picker) picker.close();
         history.back();
       } else {
-        await api.post('/api/checkins', { ...body, source });
+        const created = await api.post('/api/checkins', { ...body, source });
+        await commitMedia(created.id);
         toast('Записано');
         if (picker) picker.close();
         go(returnTo, true);
@@ -142,6 +156,10 @@ export default async function checkin(view, params) {
       return h('div', { class: 'section' }, h('div', { class: 'section-title' }, g.title), box);
     });
 
+    if (!attachments) {
+      attachments = mediaEditor({ existing: editing ? editing.media : [], photos: true, voice: true });
+    }
+
     const saveBtn = h('button', { class: 'btn primary block big', onclick: async () => { saveBtn.disabled = true; await save(); saveBtn.disabled = false; } }, 'Сохранить');
 
     fill(view,
@@ -156,6 +174,7 @@ export default async function checkin(view, params) {
       h('div', { style: { marginTop: '12px' } }, timeToggle, timeField),
       groups,
       h('div', { class: 'section' }, h('div', { class: 'section-title' }, 'Заметка'), note),
+      h('div', { class: 'section' }, h('div', { class: 'section-title' }, 'Фото и голос'), attachments.el),
       h('div', { class: 'sticky-bottom' }, saveBtn),
       editing ? h('button', {
         class: 'btn danger block', style: { marginTop: '12px' },
@@ -171,5 +190,8 @@ export default async function checkin(view, params) {
   else if (params.q && QUAD_ORDER.includes(params.q)) { renderQuadrants(); pick(params.q); }
   else renderQuadrants();
 
-  return () => { if (picker) picker.close(); };
+  return () => {
+    if (picker) picker.close();
+    if (attachments) attachments.dispose();
+  };
 }

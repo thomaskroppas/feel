@@ -1,8 +1,8 @@
 /* Service worker: оболочка приложения в кэше и показ уведомлений. */
-const VERSION = 'feel-v2';
+const VERSION = 'feel-v3';
 const SHELL = [
   '/', '/index.html', '/manifest.webmanifest', '/css/app.css',
-  '/js/app.js', '/js/api.js', '/js/ui.js', '/js/store.js', '/js/push.js', '/js/grid.js',
+  '/js/app.js', '/js/api.js', '/js/ui.js', '/js/store.js', '/js/push.js', '/js/grid.js', '/js/media.js',
   '/js/screens/install.js', '/js/screens/login.js', '/js/screens/welcome.js',
   '/js/screens/today.js', '/js/screens/checkin.js', '/js/screens/morning.js',
   '/js/screens/evening.js', '/js/screens/diary.js', '/js/screens/day.js',

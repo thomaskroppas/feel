@@ -1,6 +1,7 @@
 // Дневник: записи по дням, новые сверху; фильтр по квадранту и метке.
 import { api } from '../api.js';
 import { emotions, GROUPS, tags as loadTags } from '../store.js';
+import { mediaPreview } from '../media.js';
 import { add, h, fmtDayShort, fmtHours } from '../ui.js';
 
 const FILTER_KEY = 'feel.diary.filter';
@@ -16,7 +17,8 @@ export function entryRow(c) {
         h('span', { class: 't' }, c.local_time),
         c.source === 'evening' ? h('span', { class: 't' }, '· вечер') : null),
       tagText ? h('div', { class: 'tags' }, tagText) : null,
-      c.note ? h('div', { class: 'note' }, c.note) : null));
+      c.note ? h('div', { class: 'note' }, c.note) : null,
+      mediaPreview(c.media)));
 }
 
 export function dayMeta(log) {

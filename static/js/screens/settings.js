@@ -155,6 +155,39 @@ export default async function settings(view) {
     } catch (e) { showError(e); }
   };
 
+  // ---------- Выгрузка ----------
+  const exportPeriod = h('select', { class: 'input', 'aria-label': 'Период выгрузки' },
+    [['all', 'За всё время'], ['year', 'За год'], ['3months', 'За 3 месяца'], ['month', 'За месяц'], ['week', 'За неделю']]
+      .map(([v, t]) => h('option', { value: v }, t)));
+  const exportBtn = h('button', { class: 'btn block', style: { marginTop: '10px' } }, 'Скачать в Excel');
+  exportBtn.addEventListener('click', async () => {
+    exportBtn.disabled = true;
+    try {
+      const res = await fetch(`/api/export.xlsx?period=${exportPeriod.value}`, { credentials: 'same-origin' });
+      if (!res.ok) throw new Error('Не удалось сформировать файл');
+      const name = (res.headers.get('content-disposition') || '').match(/filename="([^"]+)"/)?.[1] || 'feel.xlsx';
+      const blob = await res.blob();
+      const file = new File([blob], name, { type: blob.type });
+      // В приложении с экрана «Домой» скачивание неудобно — отдаём файл в меню «Поделиться».
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try { await navigator.share({ files: [file], title: name }); } catch (e) { if (e.name !== 'AbortError') throw e; }
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = h('a', { href: url, download: name });
+        document.body.append(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
+      }
+    } catch (e) { showError(e); }
+    exportBtn.disabled = false;
+  });
+  const usageText = h('p', { class: 'muted small', style: { margin: '12px 0 0' } });
+  api.get('/api/media-usage').then((u) => {
+    const mb = (b) => (b / 1024 / 1024).toFixed(1).replace('.', ',');
+    usageText.textContent = `Фото и голос занимают ${mb(u.used)} МБ из ${Math.round(u.quota / 1024 / 1024)} МБ.`;
+  }).catch(() => {});
+
   const user = currentUser();
   add(view,
     h('h1', {}, 'Настройки'),
@@ -172,12 +205,14 @@ export default async function settings(view) {
     h('div', { class: 'section-title', style: { marginTop: '24px' } }, 'Метки'),
     tagsBox,
 
+    h('div', { class: 'section-title', style: { marginTop: '24px' } }, 'Выгрузка'),
+    h('div', { class: 'card' }, exportPeriod, exportBtn, usageText),
+
     h('div', { class: 'section-title', style: { marginTop: '24px' } }, 'Аккаунт'),
     h('div', { class: 'card' },
       h('p', { class: 'muted' }, user ? user.email : ''),
       h('button', { class: 'btn block', onclick: logout }, 'Выйти'),
-      h('button', { class: 'btn danger block', style: { marginTop: '8px' }, onclick: wipe }, 'Удалить все данные')),
-    h('p', { class: 'muted small', style: { textAlign: 'center', marginTop: '24px' } }, 'Выгрузка в Excel появится вместе с аналитикой.'));
+      h('button', { class: 'btn danger block', style: { marginTop: '8px' }, onclick: wipe }, 'Удалить все данные')));
 
   return () => {
     clearTimeout(saveTimer);
