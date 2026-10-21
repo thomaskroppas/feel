@@ -44,7 +44,7 @@ app/
 migrations/          Alembic; 0002 загружает data/emotions.json
 data/emotions.json   справочник эмоций
 static/              PWA: index.html, sw.js, css/, js/ (модули без сборки), icons/
-deploy/              passenger_wsgi.py, .htaccess, crontab, проверка хостинга
+deploy/              passenger_wsgi.py, crontab, проверка хостинга
 tests/               pytest
 tools/make_icons.py  генерация иконок и заставок (нужен Pillow, только для разработки)
 ```
@@ -83,10 +83,11 @@ pytest
    venv/bin/alembic upgrade head
    venv/bin/python -m app.cli create-user you@example.com --admin
    ```
-4. В корень сайта (например, `~/www/feel.meowtreach.com/`) скопировать
-   `deploy/passenger_wsgi.py` и `deploy/htaccess.example` под именем `.htaccess`.
-   В настройках сайта в панели включить обработчик Python (`PassengerPython` в
-   `.htaccess` reg.ru не разрешает); `passenger_wsgi.py` сам переключится на `~/feel/venv`.
+4. В корень сайта (например, `~/www/feel.meowtreach.com/`) скопировать только
+   `deploy/passenger_wsgi.py`: Passenger на reg.ru запускает его сам, `.htaccess` не нужен
+   (директивы Passenger там запрещены). `passenger_wsgi.py` переключается на `~/feel/venv`.
+   В настройках сайта в панели включить «Перенаправлять HTTP-запросы в HTTPS», а в `.env`
+   оставить `FORCE_HTTPS=false`: https обрабатывает nginx, приложению запросы приходят по http.
 5. Добавить задание cron из `deploy/crontab.example`.
 6. Открыть сайт в Safari на iPhone → «Поделиться» → «На экран „Домой“» → войти →
    «Включить уведомления» → в настройках «Отправить тестовое».
