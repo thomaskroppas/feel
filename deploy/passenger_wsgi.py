@@ -17,6 +17,11 @@ INTERP = os.path.join(FEEL_HOME, "venv", "bin", "python")
 if sys.executable != INTERP and os.path.exists(INTERP):
     os.execl(INTERP, INTERP, *sys.argv)
 
+# Проверочные файлы Let's Encrypt панель кладёт в папку сайта, а все запросы
+# получает приложение — сообщаем ему, где их искать.
+SITE_DIR = os.path.dirname(os.path.abspath(__file__))
+os.environ.setdefault("ACME_DIR", os.path.join(SITE_DIR, ".well-known", "acme-challenge"))
+
 sys.path.insert(0, FEEL_HOME)
 os.chdir(FEEL_HOME)
 

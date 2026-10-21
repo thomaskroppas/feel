@@ -33,6 +33,10 @@ class Settings:
         self.media_dir = _path("MEDIA_DIR", self.var_dir / "media")
         self.static_dir = BASE_DIR / "static"
         self.emotions_file = BASE_DIR / "data" / "emotions.json"
+        # Папка, куда панель хостинга кладёт проверочные файлы Let's Encrypt.
+        # Passenger перехватывает все запросы, поэтому эти файлы отдаёт приложение.
+        acme = os.getenv("ACME_DIR")
+        self.acme_dir = Path(acme) if acme else None
 
         self.registration_open = _bool("REGISTRATION_OPEN", False)
         self.cookie_secure = _bool("COOKIE_SECURE", True)

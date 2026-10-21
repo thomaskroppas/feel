@@ -94,3 +94,14 @@ def test_cli_create_user_password_from_env(monkeypatch, api):
     api.login("cli@example.com", "envpassword1")
     monkeypatch.setenv("FEEL_PASSWORD", "short")
     assert main(["set-password", "cli@example.com"]) == 1
+
+
+def test_acme_challenge_served_over_http(api, tmp_path, monkeypatch):
+    from app.config import settings
+    monkeypatch.setattr(settings, "acme_dir", tmp_path)
+    (tmp_path / "tok_ABCdef-123").write_text("tok_ABCdef-123.key")
+    r = api.c.get("/.well-known/acme-challenge/tok_ABCdef-123",
+                  headers={"X-Forwarded-Proto": "http"}, follow_redirects=False)
+    assert r.status_code == 200 and r.text == "tok_ABCdef-123.key"
+    assert api.c.get("/.well-known/acme-challenge/missing_token_1").status_code == 404
+    assert api.c.get("/.well-known/acme-challenge/..%2F..%2Fetc").status_code == 404

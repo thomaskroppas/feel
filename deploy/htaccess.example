@@ -6,4 +6,5 @@ PassengerPython /var/www/uXXXXXXX/data/feel/venv/bin/python
 # Только HTTPS (сертификат Let's Encrypt выпускается в панели reg.ru).
 RewriteEngine On
 RewriteCond %{HTTPS} !=on
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

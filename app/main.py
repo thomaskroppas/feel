@@ -1,8 +1,9 @@
 """FastAPI-приложение: API и раздача PWA из папки static."""
 import logging
+import re
 
 from fastapi import FastAPI, Request
-from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
+from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from .config import settings
@@ -21,12 +22,15 @@ CSP = ("default-src 'self'; img-src 'self' blob: data:; media-src 'self' blob:; 
        "manifest-src 'self'; worker-src 'self'; frame-ancestors 'none'; base-uri 'none'; "
        "form-action 'self'")
 
+ACME_PREFIX = "/.well-known/acme-challenge/"
+ACME_TOKEN = re.compile(r"^[A-Za-z0-9_-]{10,200}$")
 NO_CACHE = {"/", "/index.html", "/sw.js", "/manifest.webmanifest"}
 
 
 @app.middleware("http")
 async def security_headers(request: Request, call_next):
-    if settings.force_https and request.headers.get("x-forwarded-proto", "https") == "http":
+    if (settings.force_https and request.headers.get("x-forwarded-proto", "https") == "http"
+            and not request.url.path.startswith(ACME_PREFIX)):
         return RedirectResponse(str(request.url.replace(scheme="https")), status_code=301)
     response = await call_next(request)
     h = response.headers
@@ -60,6 +64,16 @@ app.include_router(prefs.router)
 @app.get("/api/health")
 def health():
     return {"ok": True}
+
+
+@app.get(ACME_PREFIX + "{token}", include_in_schema=False)
+def acme_challenge(token: str):
+    """Проверка Let's Encrypt при выпуске и продлении сертификата."""
+    if settings.acme_dir and ACME_TOKEN.match(token):
+        path = settings.acme_dir / token
+        if path.is_file():
+            return PlainTextResponse(path.read_text())
+    return PlainTextResponse("Not found", status_code=404)
 
 
 @app.get("/sw.js", include_in_schema=False)
