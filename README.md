@@ -90,6 +90,12 @@ pytest
 6. Открыть сайт в Safari на iPhone → «Поделиться» → «На экран „Домой“» → войти →
    «Включить уведомления» → в настройках «Отправить тестовое».
 
+**Без SSH, через веб-shell в панели reg.ru.** Команды те же. Пароль передавайте через
+переменную, если скрытый ввод не работает: `FEEL_PASSWORD='пароль' venv/bin/python -m app.cli create-user you@example.com --admin`,
+затем `history -c`. Долгие команды (`pip install`) запускайте в фоне с записью в файл:
+`nohup venv/bin/pip install -r requirements.txt > var/pip.log 2>&1 &`. Задание cron
+добавляется в разделе «Планировщик» панели.
+
 **Обновление:** `git pull && venv/bin/pip install -r requirements.txt && venv/bin/alembic upgrade head`,
 затем перезапуск Passenger (`touch tmp/restart.txt` в корне сайта или кнопка в панели).
 При изменениях в `static/` поднимите `VERSION` в `static/sw.js`, чтобы на телефоне сменился кэш.

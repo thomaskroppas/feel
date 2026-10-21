@@ -85,3 +85,12 @@ def test_security_headers(api):
 def test_http_redirects_to_https(api):
     r = api.c.get("/api/health", headers={"X-Forwarded-Proto": "http"}, follow_redirects=False)
     assert r.status_code == 301 and r.headers["location"].startswith("https://")
+
+
+def test_cli_create_user_password_from_env(monkeypatch, api):
+    from app.cli import main
+    monkeypatch.setenv("FEEL_PASSWORD", "envpassword1")
+    assert main(["create-user", "cli@example.com"]) == 0
+    api.login("cli@example.com", "envpassword1")
+    monkeypatch.setenv("FEEL_PASSWORD", "short")
+    assert main(["set-password", "cli@example.com"]) == 1

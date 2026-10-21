@@ -2,6 +2,9 @@
 
     python -m app.cli create-user EMAIL [--admin] [--timezone Europe/Moscow]
     python -m app.cli set-password EMAIL
+
+Пароль спрашивается без отображения. Если терминал этого не умеет (веб-shell
+в панели хостинга), передайте его через переменную окружения FEEL_PASSWORD.
     python -m app.cli gen-vapid
     python -m app.cli send-due          # запускается cron раз в 5 минут
 """
@@ -10,9 +13,22 @@ import base64
 import fcntl
 import getpass
 import logging
+import os
 import sys
 
 from sqlalchemy import select
+
+
+def _ask_password(prompt: str):
+    """Пароль из FEEL_PASSWORD или с клавиатуры (дважды). None — если не совпали."""
+    env = os.environ.get("FEEL_PASSWORD")
+    if env:
+        return env
+    first = getpass.getpass(prompt)
+    if first != getpass.getpass("Ещё раз: "):
+        print("Пароли не совпадают", file=sys.stderr)
+        return None
+    return first
 
 
 def _db():
@@ -27,9 +43,8 @@ def cmd_create_user(args) -> int:
     if args.timezone and not is_valid_tz(args.timezone):
         print(f"Неизвестный часовой пояс: {args.timezone}", file=sys.stderr)
         return 1
-    password = args.password or getpass.getpass("Пароль: ")
-    if not args.password and password != getpass.getpass("Ещё раз: "):
-        print("Пароли не совпадают", file=sys.stderr)
+    password = args.password or _ask_password("Пароль: ")
+    if password is None:
         return 1
     if len(password) < 8:
         print("Пароль — не короче 8 символов", file=sys.stderr)
@@ -50,9 +65,11 @@ def cmd_set_password(args) -> int:
     from . import models
     from .security import hash_password
 
-    password = getpass.getpass("Новый пароль: ")
-    if password != getpass.getpass("Ещё раз: ") or len(password) < 8:
-        print("Пароли не совпадают или короче 8 символов", file=sys.stderr)
+    password = _ask_password("Новый пароль: ")
+    if password is None:
+        return 1
+    if len(password) < 8:
+        print("Пароль — не короче 8 символов", file=sys.stderr)
         return 1
     db = _db()
     try:
