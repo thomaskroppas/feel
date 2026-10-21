@@ -1,5 +1,5 @@
 /* Service worker: оболочка приложения в кэше и показ уведомлений. */
-const VERSION = 'feel-v5';
+const VERSION = 'feel-v6';
 // Отдельный кэш для адреса экрана из уведомления — его не трогает смена версии.
 const NAV_CACHE = 'feel-nav';
 const NAV_KEY = '/__pending-nav';
@@ -92,6 +92,7 @@ self.addEventListener('notificationclick', (event) => {
       if (new URL(client.url).origin === self.location.origin) {
         client.postMessage({ type: 'navigate', url: target });
         try { await client.focus(); } catch (e) { /* не во всех браузерах */ }
+        try { if ('navigate' in client) await client.navigate(target); } catch (e) { /* не везде поддерживается */ }
         return;
       }
     }

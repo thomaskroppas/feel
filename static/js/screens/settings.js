@@ -159,6 +159,15 @@ export default async function settings(view) {
   }, label)));
   drawThemes();
 
+  // Версия service worker'а — видно, обновилось ли приложение на телефоне.
+  const versionLine = h('p', { class: 'muted small', style: { textAlign: 'center', marginTop: '20px' } });
+  if ('caches' in window) {
+    caches.keys().then((keys) => {
+      const v = keys.find((k) => /^feel-v\d+$/.test(k));
+      versionLine.textContent = v ? `Версия ${v.replace('feel-v', '')}` : '';
+    }).catch(() => {});
+  }
+
   const user = currentUser();
   add(view,
     h('h1', {}, 'Настройки'),
@@ -189,7 +198,8 @@ export default async function settings(view) {
     h('div', { class: 'card' },
       h('p', { class: 'muted' }, user ? user.email : ''),
       h('button', { class: 'btn block', onclick: logout }, 'Выйти'),
-      h('button', { class: 'btn danger block', style: { marginTop: '8px' }, onclick: wipe }, 'Удалить все данные')));
+      h('button', { class: 'btn danger block', style: { marginTop: '8px' }, onclick: wipe }, 'Удалить все данные')),
+    versionLine);
 
   return () => {
     clearTimeout(saveTimer);

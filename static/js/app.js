@@ -178,18 +178,36 @@ async function followPendingNav() {
   return true;
 }
 
+// iOS показывает приложение раньше, чем service worker успевает записать адрес,
+// поэтому после возвращения на экран проверяем несколько раз в течение ~7 секунд.
+let navPolling = false;
+async function pollPendingNav() {
+  if (navPolling) return false;
+  navPolling = true;
+  try {
+    for (const delay of [0, 250, 600, 1200, 2000, 3000]) {
+      if (delay) await new Promise((r) => setTimeout(r, delay));
+      if (await followPendingNav()) return true;
+    }
+    return false;
+  } finally {
+    navPolling = false;
+  }
+}
+
 // Вернулись в приложение после долгого перерыва — обновляем экран (например, сменилась дата).
 let hiddenAt = 0;
 document.addEventListener('visibilitychange', async () => {
   if (document.hidden) { hiddenAt = Date.now(); return; }
-  if (await followPendingNav()) return;
+  if (await pollPendingNav()) return;
   if (hiddenAt && Date.now() - hiddenAt > 10 * 60 * 1000 && !document.querySelector('.grid-screen')) {
     const { path } = parseHash();
     if (path === '/' || path === '/diary') render();
   }
 });
 
-window.addEventListener('focus', () => { followPendingNav(); });
+window.addEventListener('focus', () => { pollPendingNav(); });
+window.addEventListener('pageshow', () => { pollPendingNav(); });
 
 (async () => {
   // Приложение запустили тапом по уведомлению — сразу открываем нужный экран.
@@ -200,4 +218,5 @@ window.addEventListener('focus', () => { followPendingNav(); });
   }
   await render();
   if (me) push.resync();
+  pollPendingNav();
 })();
