@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from .. import models
 from ..timeutil import iso_utc, to_local
+from . import media as media_svc
 
 DAY_LOG_FIELDS = ("plan_status", "plan_text", "sleep_hours", "sleep_quality",
                   "sport_type", "sport_minutes", "day_summary")
@@ -45,7 +46,7 @@ def serialize_checkin(c: models.Checkin, tz_name: str) -> dict:
         "source": c.source,
         "note": c.note or "",
         "tags": [{"id": t.id, "group": t.group, "name": t.name} for t in c.tags],
-        "media": [],
+        "media": [media_svc.serialize(m) for m in c.media],
     }
 
 
@@ -74,11 +75,12 @@ def day_logs_between(db: Session, user_id: int, start: date, end: date) -> Dict[
 
 
 def day_payload(d: date, checkins: List[models.Checkin], log: Optional[models.DayLog],
-                tz_name: str) -> dict:
+                tz_name: str, media: Optional[List[models.Media]] = None) -> dict:
     return {
         "date": d.isoformat(),
         "quadrant": day_quadrant(checkins),
         "day_log": serialize_day_log(log),
+        "media": [media_svc.serialize(m) for m in (media or [])],
         "checkins": [serialize_checkin(c, tz_name) for c in checkins],
         "has_evening": any(c.source == "evening" for c in checkins),
     }
@@ -87,7 +89,7 @@ def day_payload(d: date, checkins: List[models.Checkin], log: Optional[models.Da
 def get_day(db: Session, user: models.User, d: date, tz_name: str) -> dict:
     checkins = checkins_between(db, user.id, d, d)
     log = db.get(models.DayLog, (user.id, d))
-    return day_payload(d, checkins, log, tz_name)
+    return day_payload(d, checkins, log, tz_name, media_svc.day_media(db, user.id, d, d))
 
 
 def week(db: Session, user_id: int, today: date) -> List[dict]:

@@ -11,6 +11,7 @@ from .. import models
 from ..db import get_db
 from ..security import current_user
 from ..services import days as days_svc
+from ..services import media as media_svc
 from ..services.emotions import quadrants
 from ..timeutil import local_date_of, to_local, to_utc_naive, utcnow
 
@@ -150,8 +151,10 @@ def update_checkin(checkin_id: int, body: CheckinPatch, db: Session = Depends(ge
 def delete_checkin(checkin_id: int, db: Session = Depends(get_db),
                    user: models.User = Depends(current_user)):
     c = _own_checkin(db, user, checkin_id)
+    files = list(c.media)
     db.delete(c)
     db.commit()
+    media_svc.remove_files(files)
     return {"ok": True}
 
 
@@ -261,6 +264,9 @@ def diary(before: Optional[date] = None, days: int = Query(default=14, ge=1, le=
     start, end = ordered[-1], ordered[0]
     all_checkins = days_svc.checkins_between(db, user.id, start, end)
     logs = days_svc.day_logs_between(db, user.id, start, end)
+    day_files: Dict[date, list] = {}
+    for m in media_svc.day_media(db, user.id, start, end):
+        day_files.setdefault(m.day_log_date, []).append(m)
     by_day: Dict[date, list] = {}
     for c in all_checkins:
         by_day.setdefault(c.local_date, []).append(c)
@@ -268,7 +274,7 @@ def diary(before: Optional[date] = None, days: int = Query(default=14, ge=1, le=
     out = []
     for d in ordered:
         items = by_day.get(d, [])
-        payload = days_svc.day_payload(d, items, logs.get(d), tz_name)
+        payload = days_svc.day_payload(d, items, logs.get(d), tz_name, day_files.get(d))
         if filtered:
             payload["checkins"] = [
                 x for x, c in zip(payload["checkins"], items)

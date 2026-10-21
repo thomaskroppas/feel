@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, Red
 from fastapi.staticfiles import StaticFiles
 
 from .config import settings
-from .routers import auth, journal, prefs
+from .routers import auth, journal, media, prefs
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 log = logging.getLogger("feel")
@@ -59,6 +59,7 @@ async def unhandled(request: Request, exc: Exception):
 app.include_router(auth.router)
 app.include_router(journal.router)
 app.include_router(prefs.router)
+app.include_router(media.router)
 
 
 @app.get("/api/health")

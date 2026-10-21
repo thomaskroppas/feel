@@ -113,6 +113,8 @@ class Checkin(Base):
 
     emotion: Mapped[Emotion] = relationship(lazy="joined")
     tags: Mapped[List["Tag"]] = relationship(secondary="checkin_tags", lazy="selectin", order_by="Tag.sort")
+    media: Mapped[List["Media"]] = relationship(lazy="selectin", order_by="Media.id",
+                                                cascade="all, delete-orphan", passive_deletes=True)
 
     __table_args__ = (
         CheckConstraint("source IN ('manual','evening','notification')", name="ck_checkins_source"),

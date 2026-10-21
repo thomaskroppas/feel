@@ -116,7 +116,7 @@ def cmd_send_due(args) -> int:
     db = _db()
     try:
         for s in run_due(db):
-            print(f"{s.local_date} user={s.user_id} {s.kind}: {s.status}")
+            print(f"{s.local_date} user={s.user_id} {s.kind}: {s.status}", flush=True)
     finally:
         db.close()
         lock.close()
