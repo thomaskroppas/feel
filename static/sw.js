@@ -1,5 +1,8 @@
 /* Service worker: оболочка приложения в кэше и показ уведомлений. */
-const VERSION = 'feel-v4';
+const VERSION = 'feel-v5';
+// Отдельный кэш для адреса экрана из уведомления — его не трогает смена версии.
+const NAV_CACHE = 'feel-nav';
+const NAV_KEY = '/__pending-nav';
 const SHELL = [
   '/', '/index.html', '/manifest.webmanifest', '/css/app.css',
   '/js/app.js', '/js/api.js', '/js/ui.js', '/js/store.js', '/js/push.js', '/js/grid.js', '/js/media.js',
@@ -18,7 +21,7 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== VERSION).map((k) => caches.delete(k))))
+      .then((keys) => Promise.all(keys.filter((k) => k !== VERSION && k !== NAV_CACHE).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
@@ -80,6 +83,10 @@ self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   const target = new URL(urlOf(event.notification), self.location.origin).href;
   event.waitUntil((async () => {
+    // iOS может потерять сообщение открытому приложению, поэтому адрес ещё и
+    // сохраняется: приложение заберёт его, как только окажется на экране.
+    const cache = await caches.open(NAV_CACHE);
+    await cache.put(NAV_KEY, new Response(JSON.stringify({ url: target, at: Date.now() })));
     const all = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
     for (const client of all) {
       if (new URL(client.url).origin === self.location.origin) {

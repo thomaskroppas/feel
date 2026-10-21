@@ -134,20 +134,70 @@ if ('serviceWorker' in navigator) {
   // Тап по уведомлению при открытом приложении: service worker просит открыть экран.
   navigator.serviceWorker.addEventListener('message', (ev) => {
     if (ev.data && ev.data.type === 'navigate' && ev.data.url) {
-      const url = new URL(ev.data.url, location.origin);
-      if (url.origin === location.origin) go(url.hash || '#/');
+      clearPendingNav();
+      openUrl(ev.data.url);
     }
   });
 }
 
+// ---------- Переход по тапу на уведомление ----------
+const NAV_CACHE = 'feel-nav';
+const NAV_KEY = '/__pending-nav';
+const NAV_MAX_AGE_MS = 5 * 60 * 1000;
+
+function openUrl(raw) {
+  const url = new URL(raw, location.origin);
+  if (url.origin === location.origin) go(url.hash || '#/');
+}
+
+function clearPendingNav() {
+  if (!('caches' in window)) return;
+  caches.open(NAV_CACHE).then((c) => c.delete(NAV_KEY)).catch(() => {});
+}
+
+// Адрес, который service worker сохранил при нажатии на уведомление.
+async function takePendingNav() {
+  if (!('caches' in window)) return null;
+  try {
+    const cache = await caches.open(NAV_CACHE);
+    const res = await cache.match(NAV_KEY);
+    if (!res) return null;
+    await cache.delete(NAV_KEY);
+    const { url, at } = await res.json();
+    return Date.now() - at < NAV_MAX_AGE_MS ? url : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+async function followPendingNav() {
+  const url = await takePendingNav();
+  if (!url) return false;
+  removeOverlays();
+  openUrl(url);
+  return true;
+}
+
 // Вернулись в приложение после долгого перерыва — обновляем экран (например, сменилась дата).
 let hiddenAt = 0;
-document.addEventListener('visibilitychange', () => {
+document.addEventListener('visibilitychange', async () => {
   if (document.hidden) { hiddenAt = Date.now(); return; }
+  if (await followPendingNav()) return;
   if (hiddenAt && Date.now() - hiddenAt > 10 * 60 * 1000 && !document.querySelector('.grid-screen')) {
     const { path } = parseHash();
     if (path === '/' || path === '/diary') render();
   }
 });
 
-render().then(() => { if (me) push.resync(); });
+window.addEventListener('focus', () => { followPendingNav(); });
+
+(async () => {
+  // Приложение запустили тапом по уведомлению — сразу открываем нужный экран.
+  const pending = await takePendingNav();
+  if (pending) {
+    const url = new URL(pending, location.origin);
+    if (url.origin === location.origin && url.hash) history.replaceState(null, '', url.hash);
+  }
+  await render();
+  if (me) push.resync();
+})();
