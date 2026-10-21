@@ -10,4 +10,5 @@ cryptography>=42
 python-multipart==0.0.20
 python-dotenv==1.0.1
 a2wsgi==1.10.7
+openpyxl==3.1.5
 tzdata>=2024.1

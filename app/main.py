@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, Red
 from fastapi.staticfiles import StaticFiles
 
 from .config import settings
-from .routers import auth, journal, media, prefs
+from .routers import auth, journal, media, prefs, reports
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 log = logging.getLogger("feel")
@@ -60,6 +60,7 @@ app.include_router(auth.router)
 app.include_router(journal.router)
 app.include_router(prefs.router)
 app.include_router(media.router)
+app.include_router(reports.router)
 
 
 @app.get("/api/health")
