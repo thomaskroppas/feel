@@ -84,8 +84,9 @@ pytest
    venv/bin/python -m app.cli create-user you@example.com --admin
    ```
 4. В корень сайта (например, `~/www/feel.meowtreach.com/`) скопировать
-   `deploy/passenger_wsgi.py` и `deploy/htaccess.example` под именем `.htaccess`,
-   подставить свой логин в путь к Python.
+   `deploy/passenger_wsgi.py` и `deploy/htaccess.example` под именем `.htaccess`.
+   В настройках сайта в панели включить обработчик Python (`PassengerPython` в
+   `.htaccess` reg.ru не разрешает); `passenger_wsgi.py` сам переключится на `~/feel/venv`.
 5. Добавить задание cron из `deploy/crontab.example`.
 6. Открыть сайт в Safari на iPhone → «Поделиться» → «На экран „Домой“» → войти →
    «Включить уведомления» → в настройках «Отправить тестовое».
